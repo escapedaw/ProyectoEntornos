@@ -7,7 +7,9 @@ public class Pista {
 	private String descripcion;
 	private String solicitado;
 	private String confirmado;
-	public Pista(String cod_pista, String nsala, String descripcion, String solicitado, String confirmado) {
+	private int numPistas;
+	
+	public Pista(String nsala, String descripcion, String solicitado, String confirmado) {
 		super();
 		this.cod_pista = cod_pista;
 		this.nsala = nsala;
@@ -15,6 +17,9 @@ public class Pista {
 		this.solicitado = solicitado;
 		this.confirmado = confirmado;
 	}
+	
+	
+	
 	public String getCod_pista() {
 		return cod_pista;
 	}

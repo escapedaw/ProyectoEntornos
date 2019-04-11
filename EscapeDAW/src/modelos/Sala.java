@@ -3,72 +3,96 @@ package modelos;
 public class Sala {
 	
 	
-	private String nsala;
-	private String id_emple;
-	private String id_jefe;
+	private String nSala;
+	private String idEmple;
+	private String idJefe;
 	private String tipo;
 	private String dificultad;
-	private int npersonas;
+	private int nPersonas;
 	private int precio;
+	private static int numSalas;
 	
-	public Sala(String nsala, String id_emple, String id_jefe, String tipo, String dificultad, int npersonas,
+	public Sala(String idEmple, String idJefe, String tipo, String dificultad, int nPersonas,
 			int precio) {
 		super();
-		this.nsala = nsala;
-		this.id_emple = id_emple;
-		this.id_jefe = id_jefe;
+		numSalas++;
+		this.nSala = "S" + numSalas;
+		this.idEmple = idEmple;
+		this.idJefe = idJefe;
 		this.tipo = tipo;
 		this.dificultad = dificultad;
-		this.npersonas = npersonas;
+		this.nPersonas = nPersonas;
 		this.precio = precio;
 	}
 	
+	public Sala(String nSala, String idEmple, String idJefe, String tipo, String dificultad, int nPersonas,
+			int precio) {
+		super();
+		this.nSala = nSala;
+		this.idEmple = idEmple;
+		this.idJefe = idJefe;
+		this.tipo = tipo;
+		this.dificultad = dificultad;
+		this.nPersonas = nPersonas;
+		this.precio = precio;
+	}
+
+
+
 	public String getNsala() {
-		return nsala;
+		return nSala;
 	}
-	public void setNsala(String nsala) {
-		this.nsala = nsala;
+	
+	public void setNsala(String nSala) {
+		this.nSala = nSala;
 	}
-	public String getId_emple() {
-		return id_emple;
+	
+	public String getIdEmple() {
+		return idEmple;
 	}
-	public void setId_emple(String id_emple) {
-		this.id_emple = id_emple;
+	public void setIdEmple(String idEmple) {
+		this.idEmple = idEmple;
 	}
-	public String getId_jefe() {
-		return id_jefe;
+	
+	public String getIdJefe() {
+		return idJefe;
 	}
-	public void setId_jefe(String id_jefe) {
-		this.id_jefe = id_jefe;
+	
+	public void setIdJefe(String idJefe) {
+		this.idJefe = idJefe;
 	}
+	
 	public String getTipo() {
 		return tipo;
 	}
+	
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
 	}
+	
 	public String getDificultad() {
 		return dificultad;
 	}
+	
 	public void setDificultad(String dificultad) {
 		this.dificultad = dificultad;
 	}
-	public int getNpersonas() {
-		return npersonas;
+	
+	public int getNPersonas() {
+		return nPersonas;
 	}
-	public void setNpersonas(int npersonas) {
-		this.npersonas = npersonas;
+	
+	public void setNPersonas(int nPersonas) {
+		this.nPersonas = nPersonas;
 	}
+	
 	public int getPrecio() {
 		return precio;
 	}
+	
 	public void setPrecio(int precio) {
 		this.precio = precio;
 	}
-	
-	
-	
-	
 	
 
 }
