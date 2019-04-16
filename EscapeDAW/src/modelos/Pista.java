@@ -5,11 +5,25 @@ public class Pista {
 	private String cod_pista;
 	private String nsala;
 	private String descripcion;
-	private String solicitado;
-	private String confirmado;
-	private int numPistas;
+	private boolean solicitado;
+	private boolean confirmado;
+	private static int numPistas;
 	
-	public Pista(String nsala, String descripcion, String solicitado, String confirmado) {
+	/**
+	 * Constructor para crear objeto Pista
+	 * @param nsala
+	 * @param descripcion
+	 */
+	
+	public Pista(String nsala, String descripcion) {
+		super();
+		numPistas++;
+		this.cod_pista = "PI" + numPistas;
+		this.nsala = nsala;
+		this.descripcion = descripcion;
+	}
+	
+	public Pista(String cod_pista, String nsala, String descripcion, boolean solicitado, boolean confirmado) {
 		super();
 		this.cod_pista = cod_pista;
 		this.nsala = nsala;
@@ -19,7 +33,19 @@ public class Pista {
 	}
 	
 	
-	
+
+	public Pista(String cod_pista, String nsala, String descripcion) {
+		super();
+		this.cod_pista = cod_pista;
+		this.nsala = nsala;
+		this.descripcion = descripcion;
+	}
+
+	public Pista(String descripcion) {
+		super();
+		this.descripcion = descripcion;
+	}
+
 	public String getCod_pista() {
 		return cod_pista;
 	}
@@ -38,16 +64,16 @@ public class Pista {
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}
-	public String getSolicitado() {
+	public boolean getSolicitado() {
 		return solicitado;
 	}
-	public void setSolicitado(String solicitado) {
+	public void setSolicitado(boolean solicitado) {
 		this.solicitado = solicitado;
 	}
-	public String getConfirmado() {
+	public boolean getConfirmado() {
 		return confirmado;
 	}
-	public void setConfirmado(String confirmado) {
+	public void setConfirmado(boolean confirmado) {
 		this.confirmado = confirmado;
 	}
 
