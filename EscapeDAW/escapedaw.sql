@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 10-04-2019 a las 11:48:23
+-- Tiempo de generación: 23-04-2019 a las 07:02:19
 -- Versión del servidor: 5.5.24-log
 -- Versión de PHP: 5.4.3
 
@@ -57,6 +57,13 @@ CREATE TABLE IF NOT EXISTS `credenciales` (
   `ROL` char(1) NOT NULL,
   PRIMARY KEY (`USUARIO`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `credenciales`
+--
+
+INSERT INTO `credenciales` (`USUARIO`, `PASSWORD`, `ROL`) VALUES
+('J01', 'AAAAA', 'J');
 
 -- --------------------------------------------------------
 
@@ -119,6 +126,13 @@ CREATE TABLE IF NOT EXISTS `pistas` (
   KEY `NSALA` (`NSALA`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Volcado de datos para la tabla `pistas`
+--
+
+INSERT INTO `pistas` (`COD_PISTA`, `NSALA`, `DESCRIPCION`, `SOLICITADO`, `CONFIRMADO`) VALUES
+('PI01', '01', 'MIEDO', 0, 0);
+
 -- --------------------------------------------------------
 
 --
@@ -128,14 +142,24 @@ CREATE TABLE IF NOT EXISTS `pistas` (
 CREATE TABLE IF NOT EXISTS `reservas` (
   `COD_RESERVA` varchar(10) NOT NULL DEFAULT '',
   `FECHA` date NOT NULL,
+  `NSALA` varchar(9) NOT NULL,
   `ID_EMPLE` varchar(4) NOT NULL,
   `NIF_CLIENTE` varchar(9) NOT NULL,
-  `NPERSONAS` int(2) NOT NULL,
+  `NPERSONAS` int(10) NOT NULL,
+  `IMPORTE` int(3) NOT NULL,
   PRIMARY KEY (`COD_RESERVA`),
   KEY `ID_EMPLE` (`ID_EMPLE`),
   KEY `NIF_CLIENTE` (`NIF_CLIENTE`),
-  KEY `NPERSONAS` (`NPERSONAS`)
+  KEY `NPERSONAS` (`NPERSONAS`),
+  KEY `NSALA` (`NSALA`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `reservas`
+--
+
+INSERT INTO `reservas` (`COD_RESERVA`, `FECHA`, `NSALA`, `ID_EMPLE`, `NIF_CLIENTE`, `NPERSONAS`, `IMPORTE`) VALUES
+('RE01', '2019-04-24', '01', 'EM01', '55555555H', 6, 200);
 
 -- --------------------------------------------------------
 
@@ -149,13 +173,20 @@ CREATE TABLE IF NOT EXISTS `salas` (
   `ID_JEFE` varchar(4) NOT NULL,
   `TIPO` varchar(15) NOT NULL,
   `DIFICULTAD` varchar(10) NOT NULL,
-  `NPERSONAS` int(2) NOT NULL,
+  `NPERSONAS` int(10) NOT NULL,
   `PRECIO` int(10) NOT NULL DEFAULT '15',
   PRIMARY KEY (`NSALA`),
   KEY `ID_EMPLE` (`ID_EMPLE`),
   KEY `ID_JEFE` (`ID_JEFE`),
   KEY `NPERSONAS` (`NPERSONAS`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `salas`
+--
+
+INSERT INTO `salas` (`NSALA`, `ID_EMPLE`, `ID_JEFE`, `TIPO`, `DIFICULTAD`, `NPERSONAS`, `PRECIO`) VALUES
+('01', 'EM01', 'EM01', 'Miedo', 'Normal', 6, 15);
 
 -- --------------------------------------------------------
 
@@ -166,11 +197,11 @@ CREATE TABLE IF NOT EXISTS `salas` (
 CREATE TABLE IF NOT EXISTS `visitas` (
   `NSALA` varchar(9) NOT NULL,
   `ID_EMPLE` varchar(4) NOT NULL,
-  `NIF_CLIENTE` varchar(9) NOT NULL,
+  `NIF_CLIENTE` varchar(4) NOT NULL,
   `FECHA` date NOT NULL,
   `TIEMPO` date NOT NULL,
   `NPERSONAS` int(2) NOT NULL,
-  `IMPORTE` int(2) NOT NULL,
+  `IMPORTE` int(3) NOT NULL,
   KEY `ID_EMPLE` (`ID_EMPLE`,`NIF_CLIENTE`),
   KEY `NIF_CLIENTE` (`NIF_CLIENTE`),
   KEY `NSALA` (`NSALA`),
@@ -203,6 +234,7 @@ ALTER TABLE `pistas`
 -- Filtros para la tabla `reservas`
 --
 ALTER TABLE `reservas`
+  ADD CONSTRAINT `reservas_ibfk_3` FOREIGN KEY (`NSALA`) REFERENCES `salas` (`NSALA`),
   ADD CONSTRAINT `reservas_ibfk_1` FOREIGN KEY (`ID_EMPLE`) REFERENCES `empleados` (`ID`),
   ADD CONSTRAINT `reservas_ibfk_2` FOREIGN KEY (`NIF_CLIENTE`) REFERENCES `clientes` (`NIF`);
 

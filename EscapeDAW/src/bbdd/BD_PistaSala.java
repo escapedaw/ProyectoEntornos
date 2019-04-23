@@ -240,7 +240,7 @@ public class BD_PistaSala extends BD_Conector{
 	
 	public boolean confirmarPista () {
 		String cadenaSQL;
-		cadenaSQL="SELECT SOLICITADO from pista WHERE SOLICITADO = TRUE";
+		cadenaSQL="SELECT SOLICITADO from pistas WHERE SOLICITADO = TRUE";
 		
 		try{
 			this.abrir();

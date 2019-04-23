@@ -37,8 +37,6 @@ public class Sala {
 		this.precio = precio;
 	}
 
-
-
 	public String getNsala() {
 		return nSala;
 	}

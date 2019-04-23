@@ -5,6 +5,7 @@ public class Credencial {
 	private String usuario;
 	private String password;
 	private char rol;
+	
 	public Credencial(String usuario, String password, char rol) {
 		super();
 		this.usuario = usuario;
