@@ -99,7 +99,6 @@ public class BD_PistaSala extends BD_Conector{
 			reg=s.executeQuery(cadenaSQL);
 			while ( reg.next()){
 				listaSalas.add(new Sala(reg.getString("NSALA"),reg.getString("ID_EMPLE"),reg.getString("ID_JEFE"),reg.getString("TIPO"),reg.getString("DIFICULTAD"),reg.getInt("NPERSONAS"),reg.getInt("PRECIO")));
-				
 			}
 			s.close();
 			this.cerrar();
