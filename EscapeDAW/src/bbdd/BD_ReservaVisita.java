@@ -81,7 +81,6 @@ public BD_ReservaVisita(String bbdd){
 	
 	
 	public double updateImporte(double importe, String numsala){
-		double importeN=0;
 		String cadena="UPDATE reservas SET importe =" + importe + "  WHERE nsala ='" + numsala + "'";
 		try{
 			this.abrir();
