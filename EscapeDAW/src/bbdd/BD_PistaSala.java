@@ -9,7 +9,7 @@ import modelos.Sala;
 public class BD_PistaSala extends BD_Conector{
 	private static Statement s;	
 	private static ResultSet reg;
-	
+	private int nsala;
 	public BD_PistaSala() {
 		super();
 	}
@@ -209,44 +209,103 @@ public class BD_PistaSala extends BD_Conector{
 	}
 	
 	/**
-	 * Metodo que cambia a true la variable solicitado (Pista) cuando el cliente pide una pista
-	 * @return true si se ha ejecutado bien, false si ha dado fallo
+	 * Metodo que busca la sala en la que se encuentra un cliente
+	 * @param nif
+	 * @return nsala si la encuentra, 0 si no tiene sala
 	 */
-
-	public boolean pedirPista (String cod_pista) {
-		String cadenaSQL="UPDATE pistas SET SOLICITADO = TRUE where COD_PISTA = '" + cod_pista +  "')";
+	public int buscarSala (String nif) {
+		String cadenaSQL="SELECT NSALA FROM reservas WHERE NIF_CLIENTE = '" + nif +  "')";
 		
 		try{
 		this.abrir();
 		s=c.createStatement();
-		s.executeUpdate(cadenaSQL);
+		nsala = s.executeUpdate(cadenaSQL);
 		s.close();
 		this.cerrar();
-		return true;
+		return nsala;
 		}
 		catch (SQLException e){			
-			return false;
-		}	
-	} 
+			return 0;
+		}
+	}
 	
-	/*
-	 De momento se confirman todas, ha que confirmar solo una en concreto?
-	*/
 	/**
-	 * Metodo que compreba si alguna variable solicitado esta en true y cambia la variable confirmado a true 
+	 * Metodo que cambia a true la variable solicitado (Pista) cuando el cliente pide una pista
 	 * @return true si se ha ejecutado bien, false si ha dado fallo
 	 */
+
+	public boolean pedirPista (String nif) {
+		nsala = buscarSala(nif);
+		String cadenaSQL = "SELECT * FROM PISTAS WHERE NSALA = '" + nsala + "' AND SOLICITADO = 0)";
+		
+		try{
+			this.abrir();
+			s=c.createStatement();
+			reg=s.executeQuery(cadenaSQL);
+			if (reg.next()){
+				cadenaSQL="UPDATE pistas SET SOLICITADO = 1 where NSALA = '" + nsala +  "')";
+				
+				try{
+				this.abrir();
+				s=c.createStatement();
+				s.executeUpdate(cadenaSQL);
+				s.close();
+				this.cerrar();
+				return true;
+				}
+				catch (SQLException e){			
+					return false;
+				}	
+			}
+		}
+		catch (SQLException e){		
+			return false;			
+		}
+		return false;
+	} 
 	
-	public boolean confirmarPista () {
+	/**
+	 * Metodo que busca las pistas solicitadas
+	 * @return listaSolicitadas
+	 */
+	
+	public Vector <Pista> pistasSolicitadas () {
+		String cadenaSQL = "SELECT NSALA, COD_PISTA, DESCRIPCION FROM pistas WHERE SOLICITADO = 1";
+		
+		Vector<Pista> listaSolicitadas=new Vector<Pista>();
+		try{
+			this.abrir();
+			s=c.createStatement();
+			reg=s.executeQuery(cadenaSQL);
+			while (reg.next()){
+				listaSolicitadas.add(new Pista(reg.getString("COD_PISTA"),reg.getString("NSALA"),reg.getString("DESCRIPCION")));
+				
+			}
+			s.close();
+			this.cerrar();
+			return listaSolicitadas;
+		}
+		catch (SQLException e){		
+			return null;			
+		}
+	}
+	
+	/**
+	 * Metodo que confirma la pista seleccionada
+	 * @param cod_pista
+	 * @return true si se ha ejecutado, false si no
+	 */
+	
+	public boolean confirmarPista (String cod_pista) {
 		String cadenaSQL;
-		cadenaSQL="SELECT SOLICITADO from pistas WHERE SOLICITADO = TRUE";
+		cadenaSQL="SELECT * from pistas WHERE SOLICITADO = 1 AND COD_PISTA = '" + cod_pista + "')";
 		
 		try{
 			this.abrir();
 			s=c.createStatement();
 			reg=s.executeQuery(cadenaSQL);
 			while (reg.next()){
-				cadenaSQL="UPDATE pistas SET CONFIRMADO = TRUE)";
+				cadenaSQL="UPDATE pistas SET CONFIRMADO = 1)";
 				
 				try{
 				this.abrir();
@@ -277,7 +336,7 @@ public class BD_PistaSala extends BD_Conector{
 	 */
 	// Modificar para que de la pista correspondiente, ahora mismo da todas las confirmadas
 	public Vector <Pista> pistasConfirmadas () {
-		String cadenaSQL = "SELECT NSALA, COD_PISTA, DESCRIPCION FROM pistas WHERE CONFIRMADO = TRUE";
+		String cadenaSQL = "SELECT NSALA, COD_PISTA, DESCRIPCION FROM pistas WHERE CONFIRMADO = 1";
 		
 		Vector<Pista> listaConfirmadas=new Vector<Pista>();
 		try{
@@ -297,10 +356,10 @@ public class BD_PistaSala extends BD_Conector{
 		}
 	}
 	
-	public String darPista (String numSala) {
+	public String darPista (String cod_pista) {
 		Vector <Pista> confirmadas = pistasConfirmadas();
 		for (Pista pista : confirmadas){
-			if (pista.getNsala().equalsIgnoreCase(numSala))
+			if (pista.getCod_pista().equalsIgnoreCase(cod_pista))
 				System.out.println("Pista: " + pista.getDescripcion());
 		}
 		return null;
