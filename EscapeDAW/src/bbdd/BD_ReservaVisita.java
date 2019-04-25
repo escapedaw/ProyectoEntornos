@@ -18,6 +18,7 @@ public BD_ReservaVisita(String bbdd){
 }
 
 
+ 
 
 	/*no me deja por las foreign keys ?¿ 		*/
 	public  boolean añadirReserva(Reserva re){
