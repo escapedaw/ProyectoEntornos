@@ -49,6 +49,12 @@ public class Reserva {
 	public int getImporte() {
 		return importe;
 	}
+
+	@Override
+	public String toString() {
+		return "Reserva [cod_reserva=" + cod_reserva + ", fecha=" + fecha + ", nSala=" + nSala + ", id_emple="
+				+ id_emple + ", nif_cliente=" + nif_cliente + ", npersonas=" + npersonas + ", importe=" + importe + "]";
+	}
 	
 	
 	
