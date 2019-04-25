@@ -5,7 +5,11 @@ import java.util.Vector;
 
 import modelos.Pista;
 import modelos.Sala;
-
+/**
+ * 
+ * @author Sandra
+ *
+ */
 public class BD_PistaSala extends BD_Conector{
 	private static Statement s;	
 	private static ResultSet reg;
@@ -46,7 +50,7 @@ public class BD_PistaSala extends BD_Conector{
 	 */
 	
 	public  int modificarPrecio (Sala sa){	
-		String cadenaSQL="UPDATE salas SET PRECIO=" + sa.getPrecio() +"')";
+		String cadenaSQL="UPDATE salas SET PRECIO=" + sa.getPrecio() +"'";
 		
 		try{
 		this.abrir();
@@ -133,9 +137,6 @@ public class BD_PistaSala extends BD_Conector{
 			return -1;
 		}
 	}
-	/*
-	 Se supone que en el objeto que le paso ya esta cambiada la descripcion o hay que pasarle la desc nueva??
-	 */
 	
 	/**
 	 * Metodo que modifica la descripcion de una pista de la bbdd
@@ -143,8 +144,8 @@ public class BD_PistaSala extends BD_Conector{
 	 * @returnnumero de filas si se modifica, -1 si no se puede
 	 */
 	
-	public  int modificarDescripciom(String descripcion){	
-		String cadenaSQL="UPDATE pistas SET DESCRIPCION='" + descripcion +"')";
+	public  int modificarDescripcion (String descripcion){	
+		String cadenaSQL="UPDATE pistas SET DESCRIPCION='" + descripcion +"'";
 		
 		try{
 		this.abrir();
@@ -166,7 +167,7 @@ public class BD_PistaSala extends BD_Conector{
 	 */
 	
 	public int borrarPista (Pista pi){
-		String cadena="DELETE FROM pista WHERE codPista='" + pi.getCod_pista() + "'";	
+		String cadena="DELETE FROM pistas WHERE codPista='" + pi.getCod_pista() + "'";	
 		
 		try{
 		this.abrir();
@@ -189,7 +190,7 @@ public class BD_PistaSala extends BD_Conector{
 	 */
 	
 	public  Vector<Pista> listarPistas (){ 
-		String cadenaSQL="SELECT * from pista";
+		String cadenaSQL="SELECT * from pistas";
 		Vector<Pista> listaPistas=new Vector<Pista>();
 		try{
 			this.abrir();
@@ -214,12 +215,15 @@ public class BD_PistaSala extends BD_Conector{
 	 * @return nsala si la encuentra, 0 si no tiene sala
 	 */
 	public int buscarSala (String nif) {
-		String cadenaSQL="SELECT NSALA FROM reservas WHERE NIF_CLIENTE = '" + nif +  "')";
+		String cadenaSQL="SELECT NSALA FROM reservas WHERE NIF_CLIENTE = '" + nif +  "'";
 		
 		try{
 		this.abrir();
 		s=c.createStatement();
-		nsala = s.executeUpdate(cadenaSQL);
+		reg=s.executeQuery(cadenaSQL);
+		if (reg.next()){
+			nsala=reg.getInt("NSALA");
+		}
 		s.close();
 		this.cerrar();
 		return nsala;
@@ -236,14 +240,15 @@ public class BD_PistaSala extends BD_Conector{
 
 	public boolean pedirPista (String nif) {
 		nsala = buscarSala(nif);
-		String cadenaSQL = "SELECT * FROM PISTAS WHERE NSALA = '" + nsala + "' AND SOLICITADO = 0)";
+		
+		String cadenaSQL = "SELECT * FROM pistas WHERE NSALA = " + nsala + " AND SOLICITADO = 0";
 		
 		try{
 			this.abrir();
 			s=c.createStatement();
 			reg=s.executeQuery(cadenaSQL);
 			if (reg.next()){
-				cadenaSQL="UPDATE pistas SET SOLICITADO = 1 where NSALA = '" + nsala +  "')";
+				cadenaSQL="UPDATE pistas SET SOLICITADO = 1 where NSALA = " + nsala ;
 				
 				try{
 				this.abrir();
@@ -270,16 +275,15 @@ public class BD_PistaSala extends BD_Conector{
 	 */
 	
 	public Vector <Pista> pistasSolicitadas () {
-		String cadenaSQL = "SELECT NSALA, COD_PISTA, DESCRIPCION FROM pistas WHERE SOLICITADO = 1";
+		String cadenaSQL = "SELECT COD_PISTA, NSALA, DESCRIPCION FROM pistas WHERE SOLICITADO = 1";
 		
 		Vector<Pista> listaSolicitadas=new Vector<Pista>();
 		try{
 			this.abrir();
 			s=c.createStatement();
 			reg=s.executeQuery(cadenaSQL);
-			while (reg.next()){
-				listaSolicitadas.add(new Pista(reg.getString("COD_PISTA"),reg.getString("NSALA"),reg.getString("DESCRIPCION")));
-				
+			if (reg.next()){
+				listaSolicitadas.add(new Pista(reg.getString("COD_PISTA"),reg.getString("NSALA"),reg.getString("DESCRIPCION")));		
 			}
 			s.close();
 			this.cerrar();
@@ -298,14 +302,14 @@ public class BD_PistaSala extends BD_Conector{
 	
 	public boolean confirmarPista (String cod_pista) {
 		String cadenaSQL;
-		cadenaSQL="SELECT * from pistas WHERE SOLICITADO = 1 AND COD_PISTA = '" + cod_pista + "')";
+		cadenaSQL="SELECT * from pistas WHERE SOLICITADO = 1 AND COD_PISTA = '" + cod_pista + "'";
 		
 		try{
 			this.abrir();
 			s=c.createStatement();
 			reg=s.executeQuery(cadenaSQL);
 			while (reg.next()){
-				cadenaSQL="UPDATE pistas SET CONFIRMADO = 1)";
+				cadenaSQL="UPDATE pistas SET CONFIRMADO = 1";
 				
 				try{
 				this.abrir();
@@ -356,35 +360,43 @@ public class BD_PistaSala extends BD_Conector{
 		}
 	}
 	
-	public String darPista (String cod_pista) {
+	public void darPista (String cod_pista) {
 		Vector <Pista> confirmadas = pistasConfirmadas();
 		for (Pista pista : confirmadas){
 			if (pista.getCod_pista().equalsIgnoreCase(cod_pista))
 				System.out.println("Pista: " + pista.getDescripcion());
 		}
-		return null;
+	}
+	
+	public boolean reiniciarJuego () {
+		String cadenaSQL;
+		cadenaSQL="SELECT * from pistas WHERE (SOLICITADO = 1 AND CONFIRMADO = 1) OR (SOLICITADO = 1 AND CONFIRMADO = 0)";
+		
+		try{
+			this.abrir();
+			s=c.createStatement();
+			reg=s.executeQuery(cadenaSQL);
+			while (reg.next()){
+				cadenaSQL="UPDATE pistas SET SOLICITADO = 0, CONFIRMADO = 0";
+				try{
+				this.abrir();
+				s=c.createStatement();
+				s.executeUpdate(cadenaSQL);
+				s.close();
+				this.cerrar();
+				return true;
+				}
+				catch (SQLException e){			
+					return false;
+				}	
+				
+			}
+			s.close();
+			this.cerrar();
+			return true;
+		}
+		catch (SQLException e){		
+			return false;			
+		}
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,5 +1,9 @@
 package modelos;
-
+/**
+ * 
+ * @author Sandra
+ *
+ */
 public class Pista {
 
 	private String cod_pista;
@@ -49,33 +53,29 @@ public class Pista {
 	public String getCod_pista() {
 		return cod_pista;
 	}
-	public void setCod_pista(String cod_pista) {
-		this.cod_pista = cod_pista;
-	}
+	
 	public String getNsala() {
 		return nsala;
 	}
-	public void setNsala(String nsala) {
-		this.nsala = nsala;
-	}
+
 	public String getDescripcion() {
 		return descripcion;
 	}
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
+
 	public boolean getSolicitado() {
 		return solicitado;
 	}
-	public void setSolicitado(boolean solicitado) {
-		this.solicitado = solicitado;
-	}
+
 	public boolean getConfirmado() {
 		return confirmado;
 	}
-	public void setConfirmado(boolean confirmado) {
-		this.confirmado = confirmado;
+
+	@Override
+	public String toString() {
+		return "Pista [cod_pista=" + cod_pista + ", nsala=" + nsala + ", descripcion=" + descripcion + "]";
 	}
+
+	
 
 	
 	
