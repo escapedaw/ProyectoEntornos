@@ -19,7 +19,7 @@ public BD_ReservaVisita(String bbdd){
 
 
 		
-	
+	 
 	/*no me deja por las foreign keys ?¿ 		*/
 	public  boolean añadirReserva(Reserva re){
 		String cadena="INSERT INTO reservas VALUES('" + re.getCod_reserva() + "','" + re.getFecha()+"','" + re.getId_emple()+"','" + re.getNif_cliente()+"','" + re.getNpersonas()+"')"; 	
