@@ -54,7 +54,7 @@ public BD_ReservaVisita(String bbdd){
 			this.cerrar();
 			return precio;
 		}
-		catch ( SQLException e){
+		catch ( SQLException e){ 
 			return 0;
 		}
 	}
