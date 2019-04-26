@@ -1,4 +1,7 @@
 package modelos;
+
+import bbdd.BD_Conector;
+
 /**
  * 
  * @author Sandra
@@ -19,9 +22,10 @@ public class Pista {
 	 * @param descripcion
 	 */
 	
-	public Pista(String nsala, String descripcion) {
+	public Pista(String cod_pista, String nsala, String descripcion, boolean solicitado, boolean confirmado, String codigo, String tabla, String cod) {
 		super();
-		numPistas++;
+		BD_Conector bc= new BD_Conector ();
+		numPistas=bc.consultaNumeroSecuencial(codigo, tabla, cod);
 		this.cod_pista = "PI" + numPistas;
 		this.nsala = nsala;
 		this.descripcion = descripcion;

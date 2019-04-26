@@ -361,6 +361,7 @@ public class BD_PistaSala extends BD_Conector{
 	}
 	
 	public void darPista (String cod_pista) {
+		confirmarPista(cod_pista);
 		Vector <Pista> confirmadas = pistasConfirmadas();
 		for (Pista pista : confirmadas){
 			if (pista.getCod_pista().equalsIgnoreCase(cod_pista))
@@ -385,6 +386,7 @@ public class BD_PistaSala extends BD_Conector{
 				s.close();
 				this.cerrar();
 				return true;
+				
 				}
 				catch (SQLException e){			
 					return false;
@@ -399,4 +401,5 @@ public class BD_PistaSala extends BD_Conector{
 			return false;			
 		}
 	}
+	
 }

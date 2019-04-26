@@ -1,4 +1,7 @@
 package modelos;
+
+import bbdd.BD_Conector;
+
 /**
  * 
  * @author Sandra
@@ -16,10 +19,11 @@ public class Sala {
 	private static int numSalas;
 	
 	public Sala(String idEmple, String idJefe, String tipo, String dificultad, int nPersonas,
-			int precio) {
+			int precio, String codigo, String tabla, String cod) {
 		super();
-		numSalas++;
-		this.nSala = "S" + numSalas;
+		BD_Conector bc= new BD_Conector ();
+		numSalas=bc.consultaNumeroSecuencial(codigo, tabla, cod);
+		this.nSala = "S" + numSalas++;
 		this.idEmple = idEmple;
 		this.idJefe = idJefe;
 		this.tipo = tipo;
