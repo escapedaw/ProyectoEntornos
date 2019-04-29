@@ -1,16 +1,18 @@
 package modelos;
 
+import java.time.LocalDate;
+
 public class Reserva {
 
 	private String cod_reserva;
-	private String fecha;
+	private LocalDate fecha;
 	private String nSala;
 	private String id_emple;
 	private String nif_cliente;
 	private int npersonas;
 	private int importe;
 	
-	public Reserva(String cod_reserva, String fecha, String nSala, String id_emple, String nif_cliente, int npersonas,
+	public Reserva(String cod_reserva, LocalDate fecha, String nSala, String id_emple, String nif_cliente, int npersonas,
 			int importe) {
 		super();
 		this.cod_reserva = cod_reserva;
@@ -22,11 +24,27 @@ public class Reserva {
 		this.importe = importe;
 	}
 
+	
+	public Reserva(String cod_reserva, LocalDate fecha, String nSala, String id_emple, String nif_cliente,
+			int npersonas) {
+		super();
+		this.cod_reserva = cod_reserva;
+		this.fecha = fecha;
+		this.nSala = nSala;
+		this.id_emple = id_emple;
+		this.nif_cliente = nif_cliente;
+		this.npersonas = npersonas;
+	}
+
+
+
+
+
 	public String getCod_reserva() {
 		return cod_reserva;
 	}
 
-	public String getFecha() {
+	public LocalDate getFecha() {
 		return fecha;
 	}
 
