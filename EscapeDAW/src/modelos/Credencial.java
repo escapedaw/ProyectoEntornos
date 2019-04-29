@@ -36,6 +36,11 @@ public class Credencial {
 	public void setRol(char rol) {
 		this.rol = rol;
 	}
+
+	@Override
+	public String toString() {
+		return "Credencial [usuario=" + usuario + ", password=" + password + ", rol=" + rol + "]";
+	}
 	
 	
 	
