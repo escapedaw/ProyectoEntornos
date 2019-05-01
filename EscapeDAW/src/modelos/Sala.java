@@ -16,21 +16,19 @@ public class Sala {
 	private String dificultad;
 	private int nPersonas;
 	private int precio;
-	private static int numSalas;
-	
-	public Sala(String idEmple, String idJefe, String tipo, String dificultad, int nPersonas,
-			int precio, String codigo, String tabla, String cod) {
+
+/*	public Sala(String idEmple, String idJefe, String tipo, String dificultad, int nPersonas,
+			int precio ) {
 		super();
-		BD_Conector bc= new BD_Conector ();
-		numSalas=bc.consultaNumeroSecuencial(codigo, tabla, cod);
-		this.nSala = "S" + numSalas++;
+		
+		
 		this.idEmple = idEmple;
 		this.idJefe = idJefe;
 		this.tipo = tipo;
 		this.dificultad = dificultad;
 		this.nPersonas = nPersonas;
 		this.precio = precio;
-	}
+	}*/
 	
 	public Sala(String nSala, String idEmple, String idJefe, String tipo, String dificultad, int nPersonas,
 			int precio) {
@@ -42,6 +40,9 @@ public class Sala {
 		this.dificultad = dificultad;
 		this.nPersonas = nPersonas;
 		this.precio = precio;
+	}
+
+	public Sala(String nSala, int precio) {
 	}
 
 	public String getNsala() {
@@ -72,12 +73,24 @@ public class Sala {
 		return precio;
 	}
 
-	@Override
-	public String toString() {
+	
+	public String toStringMio() {
 		return "Sala [nSala=" + nSala + ", idEmple=" + idEmple + ", idJefe=" + idJefe + ", tipo=" + tipo
 				+ ", dificultad=" + dificultad + ", nPersonas=" + nPersonas + ", precio=" + precio + "]";
 	}
 	
 	
+	@Override
+	public String toString() {
+		return  nSala ;
+	}
+
+	public static String calcularNumeroSala(String codigo, String tabla, String cod) {
+		int numSalas;
+		BD_Conector bc= new BD_Conector ();
+		numSalas=bc.consultaNumeroSecuencial(codigo, tabla, cod);
+		numSalas++;
+		return "S"+numSalas;
+	}
 
 }

@@ -3,6 +3,8 @@ package bbdd;
 import java.sql.*;
 import java.util.Vector;
 
+import modelos.Empleado;
+import modelos.Jefe;
 import modelos.Pista;
 import modelos.Sala;
 /**
@@ -27,8 +29,8 @@ public class BD_PistaSala extends BD_Conector{
 	
 	public  int crearSala(Sala sa){	
 		String cadenaSQL="INSERT INTO salas VALUES('" + sa.getNsala() + "','" + sa.getIdEmple() + "','" +
-		sa.getIdJefe() + "','" + sa.getTipo() + "'," + sa.getDificultad() + ",'" +
-				sa.getNPersonas()+ "','" + sa.getPrecio() + "')";
+		sa.getIdJefe() + "','" + sa.getTipo() + "','" + sa.getDificultad() + "'," +
+				sa.getNPersonas()+ "," + sa.getPrecio() + ")";
 		
 		try{
 		this.abrir();
@@ -50,7 +52,7 @@ public class BD_PistaSala extends BD_Conector{
 	 */
 	
 	public  int modificarPrecio (Sala sa){	
-		String cadenaSQL="UPDATE salas SET PRECIO=" + sa.getPrecio() +"'";
+		String cadenaSQL="UPDATE salas SET PRECIO = " + sa.getPrecio() + " WHERE NSALA = '" + sa.getNsala() + "'";
 		
 		try{
 		this.abrir();
@@ -112,7 +114,7 @@ public class BD_PistaSala extends BD_Conector{
 			return null;			
 		}
 	}
-	
+
 	// PISTAS
 	
 	/**
@@ -187,9 +189,10 @@ public class BD_PistaSala extends BD_Conector{
 	/**
 	 * Metodo que busca todos los datos de la tabla salas y los introduce en un vector
 	 * @return vector de pistas o null si salta una excepcion
+	 * @throws TecnicaExcepcion 
 	 */
 	
-	public  Vector<Pista> listarPistas (){ 
+	public  Vector<Pista> listarPistas () { 
 		String cadenaSQL="SELECT * from pistas";
 		Vector<Pista> listaPistas=new Vector<Pista>();
 		try{
@@ -204,9 +207,10 @@ public class BD_PistaSala extends BD_Conector{
 			this.cerrar();
 			return listaPistas;
 		}
-		catch (SQLException e){		
-			return null;			
+		catch ( SQLException e){			
+			return null;				
 		}
+
 	}
 	
 	/**
@@ -337,6 +341,7 @@ public class BD_PistaSala extends BD_Conector{
 	 * Metodo que comprueba la variable confirmado y devuelve la descripcion de una pista si esta a true
 	 * @param pi
 	 * @return String descripcion
+	 * @throws TecnicaExcepcion 
 	 */
 	// Modificar para que de la pista correspondiente, ahora mismo da todas las confirmadas
 	public Vector <Pista> pistasConfirmadas () {
@@ -355,9 +360,12 @@ public class BD_PistaSala extends BD_Conector{
 			this.cerrar();
 			return listaConfirmadas;
 		}
-		catch (SQLException e){		
-			return null;			
+		catch ( SQLException e){			
+			return null;				
 		}
+		/*catch (ClassNotFoundException e){
+			throw new TecnicaExcepcion("En este momento no podemos acceder a la base de datos");
+		}*/
 	}
 	
 	public void darPista (String cod_pista) {
