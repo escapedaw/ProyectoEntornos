@@ -1,20 +1,22 @@
 -- phpMyAdmin SQL Dump
--- version 3.5.1
--- http://www.phpmyadmin.net
+-- version 4.8.4
+-- https://www.phpmyadmin.net/
 --
--- Servidor: localhost
--- Tiempo de generación: 30-04-2019 a las 07:59:12
--- Versión del servidor: 5.5.24-log
--- Versión de PHP: 5.4.3
+-- Servidor: 127.0.0.1:3306
+-- Tiempo de generación: 01-05-2019 a las 16:09:11
+-- Versión del servidor: 5.7.24
+-- Versión de PHP: 7.2.14
 
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- Base de datos: `escapedaw`
@@ -26,17 +28,26 @@ SET time_zone = "+00:00";
 -- Estructura de tabla para la tabla `clientes`
 --
 
+DROP TABLE IF EXISTS `clientes`;
 CREATE TABLE IF NOT EXISTS `clientes` (
   `NIF` varchar(9) NOT NULL,
+  `ID` varchar(4) NOT NULL,
   `ID_EMPLE` varchar(4) DEFAULT NULL,
   `NOMBRE` varchar(15) NOT NULL,
   `APELLIDO` varchar(10) DEFAULT NULL,
   `DIRECCION` varchar(20) DEFAULT NULL,
-  `TELEFONO` varchar(9) DEFAULT NULL,
+  `TELEFONO` varchar(9) NOT NULL,
   PRIMARY KEY (`NIF`),
   KEY `ID_EMPLE` (`ID_EMPLE`),
   KEY `ID_EMPLE_2` (`ID_EMPLE`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `clientes`
+--
+
+INSERT INTO `clientes` (`NIF`, `ID`, `ID_EMPLE`, `NOMBRE`, `APELLIDO`, `DIRECCION`, `TELEFONO`) VALUES
+('66666666H', 'CL1', 'EM1', 'PEPE', 'González', 'PEGASO', '66666666');
 
 -- --------------------------------------------------------
 
@@ -44,6 +55,7 @@ CREATE TABLE IF NOT EXISTS `clientes` (
 -- Estructura de tabla para la tabla `credenciales`
 --
 
+DROP TABLE IF EXISTS `credenciales`;
 CREATE TABLE IF NOT EXISTS `credenciales` (
   `USUARIO` varchar(4) NOT NULL,
   `PASSWORD` varchar(15) NOT NULL,
@@ -56,7 +68,8 @@ CREATE TABLE IF NOT EXISTS `credenciales` (
 --
 
 INSERT INTO `credenciales` (`USUARIO`, `PASSWORD`, `ROL`) VALUES
-('J01', 'AAAAA', 'J');
+('EM1', 'pepe', 'E'),
+('JE1', 'AA', 'J');
 
 -- --------------------------------------------------------
 
@@ -64,6 +77,7 @@ INSERT INTO `credenciales` (`USUARIO`, `PASSWORD`, `ROL`) VALUES
 -- Estructura de tabla para la tabla `empleados`
 --
 
+DROP TABLE IF EXISTS `empleados`;
 CREATE TABLE IF NOT EXISTS `empleados` (
   `NIF` varchar(9) DEFAULT NULL,
   `ID` varchar(4) NOT NULL,
@@ -71,7 +85,7 @@ CREATE TABLE IF NOT EXISTS `empleados` (
   `APELLIDO` varchar(20) NOT NULL,
   `TELEFONO` varchar(9) NOT NULL,
   `DIRECCION` varchar(30) NOT NULL,
-  `SUELDO` int(10) NOT NULL DEFAULT '0',
+  `SUELDO` int(10) NOT NULL,
   `ID_JEFE` varchar(4) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `NIF` (`NIF`),
@@ -83,7 +97,7 @@ CREATE TABLE IF NOT EXISTS `empleados` (
 --
 
 INSERT INTO `empleados` (`NIF`, `ID`, `NOMBRE`, `APELLIDO`, `TELEFONO`, `DIRECCION`, `SUELDO`, `ID_JEFE`) VALUES
-('22222222B', 'EM01', 'Juan', 'Sanz', '678765432', 'Bravo Murillo,120', 500, 'JE01');
+('5555555', 'EM1', 'Sandra', 'Lobon', '666', 'Paseo Castellana', 200, 'JE1');
 
 -- --------------------------------------------------------
 
@@ -91,6 +105,7 @@ INSERT INTO `empleados` (`NIF`, `ID`, `NOMBRE`, `APELLIDO`, `TELEFONO`, `DIRECCI
 -- Estructura de tabla para la tabla `jefes`
 --
 
+DROP TABLE IF EXISTS `jefes`;
 CREATE TABLE IF NOT EXISTS `jefes` (
   `NIF` varchar(9) DEFAULT NULL,
   `ID` varchar(4) NOT NULL,
@@ -108,7 +123,7 @@ CREATE TABLE IF NOT EXISTS `jefes` (
 --
 
 INSERT INTO `jefes` (`NIF`, `ID`, `NOMBRE`, `APELLIDO`, `TELEFONO`, `SUELDO`, `DIRECCION`) VALUES
-('11111111A', 'JE01', 'Rosa', 'Rodríguez García', '677878788', 1000, 'Castellana, 123');
+('66666666H', 'JE1', 'DANIEL', 'GONZALEZ', '669518300', 2000, 'PEGASO');
 
 -- --------------------------------------------------------
 
@@ -116,6 +131,7 @@ INSERT INTO `jefes` (`NIF`, `ID`, `NOMBRE`, `APELLIDO`, `TELEFONO`, `SUELDO`, `D
 -- Estructura de tabla para la tabla `pistas`
 --
 
+DROP TABLE IF EXISTS `pistas`;
 CREATE TABLE IF NOT EXISTS `pistas` (
   `COD_PISTA` varchar(10) NOT NULL DEFAULT '',
   `NSALA` varchar(9) NOT NULL,
@@ -132,8 +148,9 @@ CREATE TABLE IF NOT EXISTS `pistas` (
 -- Estructura de tabla para la tabla `reservas`
 --
 
+DROP TABLE IF EXISTS `reservas`;
 CREATE TABLE IF NOT EXISTS `reservas` (
-  `COD_RESERVA` varchar(10) NOT NULL DEFAULT '',
+  `COD_RESERVA` varchar(4) NOT NULL,
   `FECHA` date NOT NULL,
   `NSALA` varchar(9) NOT NULL,
   `ID_EMPLE` varchar(4) NOT NULL,
@@ -153,6 +170,7 @@ CREATE TABLE IF NOT EXISTS `reservas` (
 -- Estructura de tabla para la tabla `salas`
 --
 
+DROP TABLE IF EXISTS `salas`;
 CREATE TABLE IF NOT EXISTS `salas` (
   `NSALA` varchar(9) NOT NULL,
   `ID_EMPLE` varchar(4) DEFAULT NULL,
@@ -172,12 +190,7 @@ CREATE TABLE IF NOT EXISTS `salas` (
 --
 
 INSERT INTO `salas` (`NSALA`, `ID_EMPLE`, `ID_JEFE`, `TIPO`, `DIFICULTAD`, `NPERSONAS`, `PRECIO`) VALUES
-('S1', 'EM01', 'JE01', 'ffgsdf', 'fdgsdg', 2, 22),
-('S2', 'EM01', 'JE01', 'dsfs', 'sadfs', 6, 44),
-('S3', 'EM01', 'JE01', 'fasd', 'dfs', 3, 3),
-('S4', 'EM01', 'JE01', 'fd', 'gfsdg', 4, 55),
-('S5', 'EM01', 'JE01', '6', '6', 6, 6),
-('S6', 'EM01', 'JE01', 'afas', 'dfsa', 3, 4);
+('SA1', 'EM1', 'JE1', 'MIEDO', 'MEDIO', 2, 30);
 
 -- --------------------------------------------------------
 
@@ -185,6 +198,7 @@ INSERT INTO `salas` (`NSALA`, `ID_EMPLE`, `ID_JEFE`, `TIPO`, `DIFICULTAD`, `NPER
 -- Estructura de tabla para la tabla `visitas`
 --
 
+DROP TABLE IF EXISTS `visitas`;
 CREATE TABLE IF NOT EXISTS `visitas` (
   `NSALA` varchar(9) NOT NULL,
   `ID_EMPLE` varchar(4) NOT NULL,
@@ -233,8 +247,8 @@ ALTER TABLE `reservas`
 -- Filtros para la tabla `salas`
 --
 ALTER TABLE `salas`
-  ADD CONSTRAINT `salas_ibfk_3` FOREIGN KEY (`ID_JEFE`) REFERENCES `jefes` (`ID`),
-  ADD CONSTRAINT `salas_ibfk_1` FOREIGN KEY (`ID_EMPLE`) REFERENCES `empleados` (`ID`);
+  ADD CONSTRAINT `salas_ibfk_1` FOREIGN KEY (`ID_EMPLE`) REFERENCES `empleados` (`ID`),
+  ADD CONSTRAINT `salas_ibfk_3` FOREIGN KEY (`ID_JEFE`) REFERENCES `jefes` (`ID`);
 
 --
 -- Filtros para la tabla `visitas`
@@ -244,6 +258,7 @@ ALTER TABLE `visitas`
   ADD CONSTRAINT `visitas_ibfk_2` FOREIGN KEY (`NIF_CLIENTE`) REFERENCES `clientes` (`NIF`),
   ADD CONSTRAINT `visitas_ibfk_3` FOREIGN KEY (`NSALA`) REFERENCES `salas` (`NSALA`),
   ADD CONSTRAINT `visitas_ibfk_4` FOREIGN KEY (`NPERSONAS`) REFERENCES `reservas` (`NPERSONAS`);
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
