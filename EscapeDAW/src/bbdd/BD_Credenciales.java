@@ -8,7 +8,7 @@ import modelos.Cliente;
 import modelos.Credencial;
 
 public class BD_Credenciales extends BD_Conector{
-	private static Statement s;	
+	private static Statement s;	 
 	private static ResultSet reg;
 	
 	public BD_Credenciales() {
