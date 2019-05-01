@@ -28,7 +28,7 @@ public class BD_PistaSala extends BD_Conector{
 	 */
 	
 	public  int crearSala(Sala sa){	
-		String cadenaSQL="INSERT INTO salas VALUES('" + sa.getNsala() + "','" + sa.getIdEmple() + "','" +
+		String cadenaSQL="INSERT INTO salas VALUES('" + sa.getNsala() + "'," + sa.getIdEmple() + ",'" +
 		sa.getIdJefe() + "','" + sa.getTipo() + "','" + sa.getDificultad() + "'," +
 				sa.getNPersonas()+ "," + sa.getPrecio() + ")";
 		
@@ -73,8 +73,8 @@ public class BD_PistaSala extends BD_Conector{
 	 * @return numero de filas, -1 si hay una excepcion
 	 */
 	
-	public  int modificarIdEmple (Sala sa){	
-		String cadenaSQL="UPDATE salas SET ID_EMPLE = '" + sa.getIdEmple() + "' WHERE NSALA = '" + sa.getNsala() + "'";
+	public  int modificarIdEmple (String idEmple, String nSala){	
+		String cadenaSQL="UPDATE salas SET ID_EMPLE = '" + idEmple + "' WHERE NSALA = '" + nSala + "'";
 		
 		try{
 		this.abrir();
@@ -95,8 +95,8 @@ public class BD_PistaSala extends BD_Conector{
 	 * @return numero de filas si se elimina, -1 si no se puede
 	 */
 	
-	public int borrarSala (Sala sa){
-		String cadena="DELETE FROM salas WHERE NSALA='" +  sa.getNsala() + "'";	
+	public int borrarSala (String nSala){
+		String cadena="DELETE FROM salas WHERE NSALA='" +  nSala + "'";	
 		
 		try{
 		this.abrir();

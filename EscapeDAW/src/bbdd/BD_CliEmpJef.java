@@ -95,6 +95,29 @@ public class BD_CliEmpJef extends BD_Conector{
 		}
 	}
 	
+	public Vector<String>  mostrarIdEmpleados(){
+		Vector<String> v=new Vector<String>();
+		String cadena="SELECT ID FROM empleados ";
+		try{
+			
+			this.abrir();
+			s=c.createStatement();
+			reg=s.executeQuery(cadena);
+			while ( reg.next()){						
+				 v.add(reg.getString(1));
+			}
+			
+			s.close();
+			this.cerrar();
+			return v;
+		}
+		catch ( SQLException e){
+			System.out.println(e.getMessage());
+			return null;
+
+		}
+	}
+	
 	public int añadirEmpleado(Empleado emp) {
 		String cadenaSQL = "INSERT INTO empleados VALUES('" + emp.getNif() + "','" + emp.getId() + "','"
 				+ emp.getNombre() + "','" + emp.getApellido() + "','" + emp.getTelefono() + "','" + emp.getDireccion() + "','" + emp.getSueldo() + "','" + emp.getId_jefe() + "')";
@@ -108,6 +131,40 @@ public class BD_CliEmpJef extends BD_Conector{
 			return filas;
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
+			return -1;
+		}
+	}
+	
+	public int actualizar_Empleado(String id, int sueldo) {
+		String cadena = "UPDATE empleados SET SUELDO='" + sueldo + "' WHERE ID='"+id+"'";
+
+		try {
+			this.abrir();
+			s = c.createStatement();
+			int filas = s.executeUpdate(cadena);
+			s.close();
+			this.cerrar();
+			return filas;
+
+		} catch (SQLException e) {
+			this.cerrar();
+			return -1;
+		}
+	}
+	
+	public int eliminarEmpleado(String id) {
+		String cadena = "DELETE FROM empleados WHERE ID='" + id + "'";
+
+		try {
+			this.abrir();
+			s = c.createStatement();
+			int filas = s.executeUpdate(cadena);
+			s.close();
+			this.cerrar();
+			return filas;
+
+		} catch (SQLException e) {
+			this.cerrar();
 			return -1;
 		}
 	}

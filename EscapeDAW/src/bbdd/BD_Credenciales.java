@@ -16,18 +16,36 @@ public class BD_Credenciales extends BD_Conector{
 	}
 
 	public String conectarse(String usuario, String pass) {
-		String tipo="";
-		String cadenaSQL = "SELECT * from credenciales WHERE usuario='" + usuario + "' AND password='" + pass+"'";
+		String rol="";
+		String cadenaSQL = "SELECT * from credenciales WHERE USUARIO='" + usuario + "' AND PASSWORD='" + pass+"'";
 		try {
 			this.abrir();
 			s = c.createStatement();
 			reg = s.executeQuery(cadenaSQL);
 			if (reg.next()) {
-				tipo= reg.getString("tipo");
+				rol= reg.getString("rol");
 			}
 			s.close();
 			this.cerrar();
-			return tipo;
+			return rol;
+		} catch (SQLException e) {
+			return null;
+		}
+	}
+	
+	public String buscarId(String dni, String tabla) {
+		String id="";
+		String cadenaSQL = "SELECT ID from "+tabla+" WHERE NIF='" + dni + "'";
+		try {
+			this.abrir();
+			s = c.createStatement();
+			reg = s.executeQuery(cadenaSQL);
+			if (reg.next()) {
+				id= reg.getString(1);
+			}
+			s.close();
+			this.cerrar();
+			return id;
 		} catch (SQLException e) {
 			return null;
 		}
@@ -50,7 +68,7 @@ public class BD_Credenciales extends BD_Conector{
 	}
 	
 	public int eliminar_Usuario(String usuario) {
-		String cadena = "DELETE FROM credenciales WHERE usuario='" + usuario + "'";
+		String cadena = "DELETE FROM credenciales WHERE USUARIO='" + usuario + "'";
 
 		try {
 			this.abrir();
@@ -67,7 +85,7 @@ public class BD_Credenciales extends BD_Conector{
 	}
 	
 	public int cambiar_clave(String nombre, String pass) {
-		String cadena = "UPDATE credenciales SET password='" + pass + "' WHERE usuario='"+nombre+"'";
+		String cadena = "UPDATE credenciales SET PASSWORD='" + pass + "' WHERE USUARIO='"+nombre+"'";
 
 		try {
 			this.abrir();

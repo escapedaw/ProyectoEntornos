@@ -16,19 +16,6 @@ public class Sala {
 	private String dificultad;
 	private int nPersonas;
 	private int precio;
-
-/*	public Sala(String idEmple, String idJefe, String tipo, String dificultad, int nPersonas,
-			int precio ) {
-		super();
-		
-		
-		this.idEmple = idEmple;
-		this.idJefe = idJefe;
-		this.tipo = tipo;
-		this.dificultad = dificultad;
-		this.nPersonas = nPersonas;
-		this.precio = precio;
-	}*/
 	
 	public Sala(String nSala, String idEmple, String idJefe, String tipo, String dificultad, int nPersonas,
 			int precio) {
@@ -43,6 +30,8 @@ public class Sala {
 	}
 
 	public Sala(String nSala, int precio) {
+		this.nSala = nSala;
+		this.precio = precio;
 	}
 
 	public String getNsala() {
@@ -90,7 +79,7 @@ public class Sala {
 		BD_Conector bc= new BD_Conector ();
 		numSalas=bc.consultaNumeroSecuencial(codigo, tabla, cod);
 		numSalas++;
-		return "S"+numSalas;
+		return "SA"+numSalas;
 	}
 
 }
