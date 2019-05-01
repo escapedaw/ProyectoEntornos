@@ -68,6 +68,28 @@ public class BD_PistaSala extends BD_Conector{
 	}
 	
 	/**
+	 * Metodo que modifica el id del empleado
+	 * @param sa
+	 * @return numero de filas, -1 si hay una excepcion
+	 */
+	
+	public  int modificarIdEmple (Sala sa){	
+		String cadenaSQL="UPDATE salas SET ID_EMPLE = '" + sa.getIdEmple() + "' WHERE NSALA = '" + sa.getNsala() + "'";
+		
+		try{
+		this.abrir();
+		s=c.createStatement();
+		int filas=s.executeUpdate(cadenaSQL);
+		s.close();
+		this.cerrar();
+		return filas;
+		}
+		catch (SQLException e){			
+			return -1;
+		}
+	}
+	
+	/**
 	 * Metodo que elimina una sala en concreto de la bbdd
 	 * @param sa
 	 * @return numero de filas si se elimina, -1 si no se puede
