@@ -36,7 +36,6 @@ public class BD_Conector {
 	
 	}	
 	
-
 	public void cerrar(){
 		try{
 			c.close();
@@ -46,5 +45,27 @@ public class BD_Conector {
 			
 		}
 	}
+	
+	public int consultaNumeroSecuencial(String codigo, String tabla, String cod) {
+		Statement s;	
+		ResultSet reg;
+		String cadenaSQL = "SELECT MAX(SUBSTRING("+ codigo+",3)) FROM "+ tabla +" WHERE SUBSTRING(" + codigo +  ",1,2) = '"+ cod +"'";
+		int filas = 0;
+		
+		try {
+			this.abrir();
+			
+			s = c.createStatement();
+			reg = s.executeQuery(cadenaSQL);
+			if(reg.next()){
+				filas = reg.getInt(1);
+			}
+			
+			return filas;
+		}catch(SQLException e) {
+			this.cerrar();
+			return -1;
+		}
+	} 
 	
 }

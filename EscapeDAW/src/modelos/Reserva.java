@@ -22,6 +22,15 @@ public class Reserva {
 		this.importe = importe;
 	}
 
+	
+	
+	public Reserva(int importe) {
+		super();
+		this.importe = importe;
+	}
+
+
+
 	public String getCod_reserva() {
 		return cod_reserva;
 	}

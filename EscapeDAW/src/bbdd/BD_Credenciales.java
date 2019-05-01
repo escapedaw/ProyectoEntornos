@@ -33,7 +33,7 @@ public class BD_Credenciales extends BD_Conector{
 		}
 	}
 	
-	public int añadir_Usuario(Credencial cre) {
+	public int aÃ±adir_Usuario(Credencial cre) {
 		String cadenaSQL = "INSERT INTO credenciales VALUES('" + cre.getUsuario() + "','" + cre.getPassword() + "','"
 				+ cre.getRol() + "')";
 
@@ -82,5 +82,3 @@ public class BD_Credenciales extends BD_Conector{
 			return -1;
 		}
 	}
-
-}
