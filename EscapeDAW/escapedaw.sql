@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 23-04-2019 a las 07:02:19
+-- Tiempo de generación: 30-04-2019 a las 07:59:12
 -- Versión del servidor: 5.5.24-log
 -- Versión de PHP: 5.4.3
 
@@ -38,13 +38,6 @@ CREATE TABLE IF NOT EXISTS `clientes` (
   KEY `ID_EMPLE_2` (`ID_EMPLE`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Volcado de datos para la tabla `clientes`
---
-
-INSERT INTO `clientes` (`NIF`, `ID_EMPLE`, `NOMBRE`, `APELLIDO`, `DIRECCION`, `TELEFONO`) VALUES
-('55555555H', 'EM01', 'Leónidas', NULL, 'Esparta', NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -54,7 +47,7 @@ INSERT INTO `clientes` (`NIF`, `ID_EMPLE`, `NOMBRE`, `APELLIDO`, `DIRECCION`, `T
 CREATE TABLE IF NOT EXISTS `credenciales` (
   `USUARIO` varchar(4) NOT NULL,
   `PASSWORD` varchar(15) NOT NULL,
-  `ROL` char(1) NOT NULL,
+  `ROL` varchar(1) NOT NULL,
   PRIMARY KEY (`USUARIO`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -90,7 +83,7 @@ CREATE TABLE IF NOT EXISTS `empleados` (
 --
 
 INSERT INTO `empleados` (`NIF`, `ID`, `NOMBRE`, `APELLIDO`, `TELEFONO`, `DIRECCION`, `SUELDO`, `ID_JEFE`) VALUES
-('51478525N', 'EM01', 'Leo', 'Kylo', '666778899', 'Calle Alegría 1', 800, NULL);
+('22222222B', 'EM01', 'Juan', 'Sanz', '678765432', 'Bravo Murillo,120', 500, 'JE01');
 
 -- --------------------------------------------------------
 
@@ -110,6 +103,13 @@ CREATE TABLE IF NOT EXISTS `jefes` (
   UNIQUE KEY `NIF` (`NIF`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Volcado de datos para la tabla `jefes`
+--
+
+INSERT INTO `jefes` (`NIF`, `ID`, `NOMBRE`, `APELLIDO`, `TELEFONO`, `SUELDO`, `DIRECCION`) VALUES
+('11111111A', 'JE01', 'Rosa', 'Rodríguez García', '677878788', 1000, 'Castellana, 123');
+
 -- --------------------------------------------------------
 
 --
@@ -125,13 +125,6 @@ CREATE TABLE IF NOT EXISTS `pistas` (
   PRIMARY KEY (`COD_PISTA`),
   KEY `NSALA` (`NSALA`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `pistas`
---
-
-INSERT INTO `pistas` (`COD_PISTA`, `NSALA`, `DESCRIPCION`, `SOLICITADO`, `CONFIRMADO`) VALUES
-('PI01', '01', 'MIEDO', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -153,13 +146,6 @@ CREATE TABLE IF NOT EXISTS `reservas` (
   KEY `NPERSONAS` (`NPERSONAS`),
   KEY `NSALA` (`NSALA`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `reservas`
---
-
-INSERT INTO `reservas` (`COD_RESERVA`, `FECHA`, `NSALA`, `ID_EMPLE`, `NIF_CLIENTE`, `NPERSONAS`, `IMPORTE`) VALUES
-('RE01', '2019-04-24', '01', 'EM01', '55555555H', 6, 200);
 
 -- --------------------------------------------------------
 
@@ -186,7 +172,12 @@ CREATE TABLE IF NOT EXISTS `salas` (
 --
 
 INSERT INTO `salas` (`NSALA`, `ID_EMPLE`, `ID_JEFE`, `TIPO`, `DIFICULTAD`, `NPERSONAS`, `PRECIO`) VALUES
-('01', 'EM01', 'EM01', 'Miedo', 'Normal', 6, 15);
+('S1', 'EM01', 'JE01', 'ffgsdf', 'fdgsdg', 2, 22),
+('S2', 'EM01', 'JE01', 'dsfs', 'sadfs', 6, 44),
+('S3', 'EM01', 'JE01', 'fasd', 'dfs', 3, 3),
+('S4', 'EM01', 'JE01', 'fd', 'gfsdg', 4, 55),
+('S5', 'EM01', 'JE01', '6', '6', 6, 6),
+('S6', 'EM01', 'JE01', 'afas', 'dfsa', 3, 4);
 
 -- --------------------------------------------------------
 
@@ -234,16 +225,16 @@ ALTER TABLE `pistas`
 -- Filtros para la tabla `reservas`
 --
 ALTER TABLE `reservas`
-  ADD CONSTRAINT `reservas_ibfk_3` FOREIGN KEY (`NSALA`) REFERENCES `salas` (`NSALA`),
   ADD CONSTRAINT `reservas_ibfk_1` FOREIGN KEY (`ID_EMPLE`) REFERENCES `empleados` (`ID`),
-  ADD CONSTRAINT `reservas_ibfk_2` FOREIGN KEY (`NIF_CLIENTE`) REFERENCES `clientes` (`NIF`);
+  ADD CONSTRAINT `reservas_ibfk_2` FOREIGN KEY (`NIF_CLIENTE`) REFERENCES `clientes` (`NIF`),
+  ADD CONSTRAINT `reservas_ibfk_3` FOREIGN KEY (`NSALA`) REFERENCES `salas` (`NSALA`);
 
 --
 -- Filtros para la tabla `salas`
 --
 ALTER TABLE `salas`
-  ADD CONSTRAINT `salas_ibfk_1` FOREIGN KEY (`ID_EMPLE`) REFERENCES `empleados` (`ID`),
-  ADD CONSTRAINT `salas_ibfk_2` FOREIGN KEY (`ID_JEFE`) REFERENCES `empleados` (`ID`);
+  ADD CONSTRAINT `salas_ibfk_3` FOREIGN KEY (`ID_JEFE`) REFERENCES `jefes` (`ID`),
+  ADD CONSTRAINT `salas_ibfk_1` FOREIGN KEY (`ID_EMPLE`) REFERENCES `empleados` (`ID`);
 
 --
 -- Filtros para la tabla `visitas`

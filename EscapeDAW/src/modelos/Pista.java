@@ -1,5 +1,12 @@
 package modelos;
 
+import bbdd.BD_Conector;
+
+/**
+ * 
+ * @author Sandra
+ *
+ */
 public class Pista {
 
 	private String cod_pista;
@@ -15,9 +22,10 @@ public class Pista {
 	 * @param descripcion
 	 */
 	
-	public Pista(String nsala, String descripcion) {
+	public Pista(String cod_pista, String nsala, String descripcion, boolean solicitado, boolean confirmado, String codigo, String tabla, String cod) {
 		super();
-		numPistas++;
+		BD_Conector bc= new BD_Conector ();
+		numPistas=bc.consultaNumeroSecuencial(codigo, tabla, cod);
 		this.cod_pista = "PI" + numPistas;
 		this.nsala = nsala;
 		this.descripcion = descripcion;
@@ -49,33 +57,29 @@ public class Pista {
 	public String getCod_pista() {
 		return cod_pista;
 	}
-	public void setCod_pista(String cod_pista) {
-		this.cod_pista = cod_pista;
-	}
+	
 	public String getNsala() {
 		return nsala;
 	}
-	public void setNsala(String nsala) {
-		this.nsala = nsala;
-	}
+
 	public String getDescripcion() {
 		return descripcion;
 	}
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
+
 	public boolean getSolicitado() {
 		return solicitado;
 	}
-	public void setSolicitado(boolean solicitado) {
-		this.solicitado = solicitado;
-	}
+
 	public boolean getConfirmado() {
 		return confirmado;
 	}
-	public void setConfirmado(boolean confirmado) {
-		this.confirmado = confirmado;
+
+	@Override
+	public String toString() {
+		return "Pista [cod_pista=" + cod_pista + ", nsala=" + nsala + ", descripcion=" + descripcion + "]";
 	}
+
+	
 
 	
 	
