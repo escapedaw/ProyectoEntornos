@@ -1,5 +1,8 @@
 package principal;
 
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.Vector;
@@ -40,7 +43,7 @@ public class Main {
 						menuJefe(usuario);
 						break;
 					case "E":
-						System.out.println("MENU EMPLEADO");
+						menuEmpleado(usuario);
 						break;
 					case "C":
 						System.out.println("MENU CLIENTE");
@@ -123,7 +126,7 @@ public class Main {
 		do {
 			try {
 				System.out.println("\nMENU CREDENCIALES");
-				System.out.println("1. Crear credenciales");
+				System.out.println("1. Crear credenciales para empleados");
 				System.out.println("2. Modificar contraseña");
 				System.out.println("3. Eliminar credenciales");
 				System.out.println("4. Salir");
@@ -306,7 +309,6 @@ public class Main {
 	
 	public static void menuJefeSala(String usuario) {
 		int opc = 0;
-		String idemp;
 		int precio=0;
 		do {
 			try {
@@ -467,5 +469,298 @@ public class Main {
 		/**/
 	}
 	
+	public static void menuEmpleado(String usuario) {
+		int opc = 0;
+		do {
+			try {
+				System.out.println("\nMENU EMPLEADO");
+				System.out.println("1. Gestionar credenciales");
+				System.out.println("2. Gestionar clientes");
+				System.out.println("3. Gestionar reservas");
+				System.out.println("4. Gestionar pistas");
+				System.out.println("5. Ver datos visitas");
+				System.out.println("6. Desconectarse");
+
+				opc = sc.nextInt();
+				sc.nextLine();
+				switch (opc) {
+				case 1:
+					menuEmpleadoCredenciales(usuario);
+					break;
+				case 2:
+					menuEmpleadoClientes(usuario);
+					break;
+				case 3:
+					menuEmpleadoReservas(usuario);
+					break;
+				case 4:
+					//menuEmpleadoPistas();
+					break;
+				case 5:
+					//Ver visitas
+					break;
+				case 6:
+					System.out.println("Desconectado");
+					break;
+				default:
+					System.out.println("Opción incorrecta");
+					break;
+				}
+			} catch (InputMismatchException e) {
+				sc.nextLine();
+				System.out.println("\nHas introducido un caracter no válido");
+			}
+		} while (opc != 6);
+	}
 	
+	public static void menuEmpleadoCredenciales(String usuario) {
+		int opc = 0;
+		String id;
+		do {
+			try {
+				System.out.println("\nMENU CREDENCIALES");
+				System.out.println("1. Crear credenciales para cliente");
+				System.out.println("2. Modificar mi contraseña");
+				System.out.println("3. Salir");
+
+				opc = sc.nextInt();
+				sc.nextLine();
+				switch (opc) {
+				case 1:
+					System.out.println("Introduce dni:");
+					String dni = sc.nextLine();
+					id = bdCre.buscarId(dni, "clientes");
+					if (id == null)
+						System.out.println("\nFallo técnico, póngase en contacto con el administrador");
+					else if (id.equalsIgnoreCase(""))
+						System.out.println("\nNo encontrado");
+					else {
+						System.out.println("Introduce contraseña (15 caracteres):");
+						String pass = sc.nextLine();
+						int c = bdCre.anadir_Usuario(new Credencial(id, pass, 'C'));
+						switch (c) {
+						case -1:
+							System.out.println("\nFallo técnico, póngase en contacto con el administrador");
+							break;
+						case 0:
+							System.out.println("\nEn estos momentos no podemos atender su solicitud");
+							break;
+						default:
+							System.out.println("\nAñadido correctamente");
+							break;
+						}
+					}
+
+					break;
+				case 2:
+					System.out.println("Introduce nueva contraseña:");
+					String contraseña = sc.nextLine();
+
+					int contra = bdCre.cambiar_clave(usuario, contraseña);
+					switch (contra) {
+					case -1:
+						System.out.println("\nFallo técnico, póngase en contacto con el administrador");
+						break;
+					case 0:
+						System.out.println("\nEn estos momentos no podemos atender su solicitud");
+						break;
+					default:
+						System.out.println("\nCambiada correctamente");
+						break;
+					}
+
+					break;
+				case 3:
+					break;
+				default:
+					System.out.println("Opción incorrecta");
+					break;
+				}
+			} catch (InputMismatchException e) {
+				sc.nextLine();
+				System.out.println("\nHas introducido un caracter no válido");
+			}
+		} while (opc != 3);
+	}
+	
+	public static void menuEmpleadoClientes(String usuario) {
+		int opc = 0;
+		String idcli, telefono;
+		do {
+			try {
+				System.out.println("\nGESTIONAR CLIENTES");
+				System.out.println("1. Mostrar clientes");
+				System.out.println("2. Añadir clientes");
+				System.out.println("3. Modificar telefono");
+				System.out.println("4. Eliminar cliente");
+				System.out.println("5. Salir");
+
+				opc = sc.nextInt();
+				sc.nextLine();
+				switch (opc) {
+				case 1:
+					Vector<Cliente> ve = bdCliEmpJef.mostrarClientes();
+					for (int i = 0; i < ve.size(); i++)
+						System.out.println(ve.get(i).toString());
+					if (ve.size() == 0)
+						System.out.println("No hay clientes actualmente");
+					break;
+				case 2:
+					System.out.println("Introduce NIF:");
+					String nif = sc.nextLine();
+					int id = conector.consultaNumeroSecuencial("ID", "clientes", "CL");
+					String ident="CL"+(id+1);
+					System.out.println("Introduce nombre:");
+					String nombre = sc.nextLine();
+					System.out.println("Introduce apellido:");
+					String apellido = sc.nextLine();
+					System.out.println("Introduce telefono:");
+					telefono = sc.nextLine();
+					System.out.println("Introduce direccion:");
+					String direccion = sc.nextLine();
+					Cliente cli = new Cliente(nif, ident, usuario, nombre, apellido, direccion, telefono);
+					if (bdCliEmpJef.añadirCliente(cli) == 1)
+						System.out.println("Añadido");
+					else
+						System.out.println("No se ha podido añadir");
+					break;
+				case 3:
+					System.out.println("Introduce id cliente:");
+					idcli = sc.nextLine();
+					System.out.println("Introduce nuevo telefono:");
+					telefono = sc.nextLine();
+					int cambioTelefono = bdCliEmpJef.actualizar_Cliente(idcli, telefono);
+					switch (cambioTelefono) {
+					case -1:
+						System.out.println("\nFallo técnico, póngase en contacto con el administrador");
+						break;
+					case 0:
+						System.out.println("\nEn estos momentos no podemos atender su solicitud");
+						break;
+					default:
+						System.out.println("\nActualizado correctamente");
+						break;
+					}
+
+					break;
+				case 4:
+					System.out.println("Introduce id cliente:");
+					idcli = sc.nextLine();
+
+					int eliminar = bdCliEmpJef.eliminarCliente(idcli);
+					switch (eliminar) {
+					case -1:
+						System.out.println("\nFallo técnico, póngase en contacto con el administrador");
+						break;
+					case 0:
+						System.out.println("\nEn estos momentos no podemos atender su solicitud");
+						break;
+					default:
+						System.out.println("\nEliminado correctamente");
+						break;
+					}
+					break;
+				case 5:
+					break;
+				default:
+					System.out.println("Opción incorrecta");
+					break;
+				}
+			} catch (InputMismatchException e) {
+				sc.nextLine();
+				System.out.println("\nHas introducido un caracter no válido");
+			}
+		} while (opc != 5);
+	}
+	
+	public static void menuEmpleadoReservas(String usuario) {
+		int opc = 0;
+		DateTimeFormatter fechaFormateada = DateTimeFormatter.ofPattern("dd/LL/yyyy HH:mm");
+		do {
+			try {
+				System.out.println("\nGESTIONAR RESERVAS");
+				System.out.println("1. Mostrar reservas");
+				System.out.println("2. Añadir reserva");
+				System.out.println("3. Modificar personas en reserva");
+				System.out.println("4. Modificar fecha en reserva");
+				System.out.println("5. Eliminar reserva");
+				System.out.println("6. Salir");
+
+				opc = sc.nextInt();
+				sc.nextLine();
+				switch (opc) {
+				case 1:
+					Vector<Reserva> ve = bdResVis.mostrarReservas();
+					for (int i = 0; i < ve.size(); i++)
+						System.out.println(ve.get(i).toString());
+					if (ve.size() == 0)
+						System.out.println("No hay reservas actualmente");
+					break;
+				case 2:
+					System.out.println("Introduce fecha (dd/mm/aaaa):");
+					String fechaLeida = sc.nextLine();
+					System.out.println("Introduce hora (hh:mm):");
+					String horaLeida = sc.nextLine();
+					String fechaHoraLeida=fechaLeida+" "+horaLeida;
+					LocalDateTime fecha = LocalDateTime.parse(fechaHoraLeida, fechaFormateada);
+					int id = conector.consultaNumeroSecuencial("COD_RESERVA", "reservas", "RE");
+					String ident="RE"+(id+1);
+					System.out.println("Introduce nSala:");
+					String nSala = sc.nextLine();
+					System.out.println("Introduce nif cliente:");
+					String nifCliente = sc.nextLine();
+					System.out.println("Introduce numero personas:");
+					int numPersonas = sc.nextInt();
+					sc.nextLine();
+					Reserva res = new Reserva(ident, fecha, nSala, usuario, nifCliente, numPersonas);
+					if (bdResVis.añadirReserva(res) == 1)
+						System.out.println("Añadido");
+					else
+						System.out.println("No se ha podido añadir");
+					break;
+				case 3:
+					System.out.println("Introduzca código reserva que desea modificar:");
+					String codR=sc.nextLine();
+					System.out.println("Introduzca número de personas:");
+					int numP=sc.nextInt();
+					sc.nextLine();
+					if (bdResVis.modificarPersonasReserva(codR,numP) == 1)
+						System.out.println("Modificado");
+					else
+						System.out.println("No se ha podido modificar");
+					break;
+				case 4:
+					System.out.println("Introduzca código reserva que desea modificar:");
+					codR=sc.nextLine();
+					System.out.println("Introduce fecha (dd/mm/aaaa):");
+					fechaLeida = sc.nextLine();
+					System.out.println("Introduce hora (hh:mm):");
+					horaLeida = sc.nextLine();
+					fechaHoraLeida=fechaLeida+" "+horaLeida;
+					fecha = LocalDateTime.parse(fechaHoraLeida, fechaFormateada);
+					if (bdResVis.modificarFechaReserva(fecha,codR) == 1)
+						System.out.println("Modificado");
+					else
+						System.out.println("No se ha podido modificar");
+					break;
+				case 5:
+					System.out.println("Introduzca código reserva que desea modificar:");
+					codR=sc.nextLine();
+					if (bdResVis.eliminarReserva(codR) == 1)
+						System.out.println("Eliminada");
+					else
+						System.out.println("No se ha podido eliminar");
+					break;
+				case 6:
+					break;
+				default:
+					System.out.println("Opción incorrecta");
+					break;
+				}
+			} catch (InputMismatchException e) {
+				sc.nextLine();
+				System.out.println("\nHas introducido un caracter no válido");
+			}
+		} while (opc != 6);
+	}
 }

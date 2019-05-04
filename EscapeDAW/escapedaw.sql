@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 01-05-2019 a las 16:09:11
+-- Tiempo de generación: 04-05-2019 a las 14:27:25
 -- Versión del servidor: 5.7.24
 -- Versión de PHP: 7.2.14
 
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `clientes` (
 --
 
 INSERT INTO `clientes` (`NIF`, `ID`, `ID_EMPLE`, `NOMBRE`, `APELLIDO`, `DIRECCION`, `TELEFONO`) VALUES
-('66666666H', 'CL1', 'EM1', 'PEPE', 'González', 'PEGASO', '66666666');
+('55', 'CL1', 'EM1', 'DANI', 'GONZALEZ', 'PEGASO', '66');
 
 -- --------------------------------------------------------
 
@@ -68,7 +68,8 @@ CREATE TABLE IF NOT EXISTS `credenciales` (
 --
 
 INSERT INTO `credenciales` (`USUARIO`, `PASSWORD`, `ROL`) VALUES
-('EM1', 'pepe', 'E'),
+('CL1', 'EE', 'C'),
+('EM1', 'juan', 'E'),
 ('JE1', 'AA', 'J');
 
 -- --------------------------------------------------------
@@ -151,7 +152,7 @@ CREATE TABLE IF NOT EXISTS `pistas` (
 DROP TABLE IF EXISTS `reservas`;
 CREATE TABLE IF NOT EXISTS `reservas` (
   `COD_RESERVA` varchar(4) NOT NULL,
-  `FECHA` date NOT NULL,
+  `FECHA` datetime NOT NULL,
   `NSALA` varchar(9) NOT NULL,
   `ID_EMPLE` varchar(4) NOT NULL,
   `NIF_CLIENTE` varchar(9) NOT NULL,
@@ -163,6 +164,16 @@ CREATE TABLE IF NOT EXISTS `reservas` (
   KEY `NPERSONAS` (`NPERSONAS`),
   KEY `NSALA` (`NSALA`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `reservas`
+--
+
+INSERT INTO `reservas` (`COD_RESERVA`, `FECHA`, `NSALA`, `ID_EMPLE`, `NIF_CLIENTE`, `NPERSONAS`, `IMPORTE`) VALUES
+('RE1', '2020-05-12 00:00:00', 'SA1', 'EM1', '55', 4, 0),
+('RE2', '2019-05-05 20:45:00', 'SA1', 'EM1', '55', 5, 0),
+('RE3', '2019-05-25 12:45:00', 'SA1', 'EM1', '55', 6, 30),
+('RE4', '2019-05-15 12:45:00', 'SA1', 'EM1', '55', 4, 30);
 
 -- --------------------------------------------------------
 

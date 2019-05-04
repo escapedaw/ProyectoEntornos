@@ -24,7 +24,7 @@ public class BD_CliEmpJef extends BD_Conector{
 			s=c.createStatement();
 			reg=s.executeQuery(cadena);
 			while ( reg.next()){						
-				 v.add(new Cliente(reg.getString("nif"),reg.getString("id_emple"),reg.getString("nombre"),reg.getString("apellido"),reg.getString("direccion"),reg.getString("telefono")));
+				 v.add(new Cliente(reg.getString("nif"),reg.getString("id"), reg.getString("id_emple"),reg.getString("nombre"),reg.getString("apellido"),reg.getString("direccion"),reg.getString("telefono")));
 			}
 			
 			s.close();
@@ -39,7 +39,7 @@ public class BD_CliEmpJef extends BD_Conector{
 	}
 	
 	public int añadirCliente(Cliente cli) {
-		String cadenaSQL = "INSERT INTO clientes VALUES('" + cli.getNif() + "','" + cli.getId_emple() + "','"
+		String cadenaSQL = "INSERT INTO clientes VALUES('" + cli.getNif() + "','" + cli.getId() + "','" + cli.getId_emple() + "','"
 				+ cli.getNombre() + "','" + cli.getApellido() + "','" + cli.getDireccion() + "','" + cli.getTelefono() + "')";
 
 		try {
@@ -55,8 +55,25 @@ public class BD_CliEmpJef extends BD_Conector{
 		}
 	}
 	
-	public int eliminarCliente(String dni) {
-		String cadena = "DELETE FROM clientes WHERE nif='" + dni + "'";
+	public int eliminarCliente(String id) {
+		String cadena = "DELETE FROM clientes WHERE ID='" + id + "'";
+
+		try {
+			this.abrir();
+			s = c.createStatement();
+			int filas = s.executeUpdate(cadena);
+			s.close();
+			this.cerrar();
+			return filas;
+
+		} catch (SQLException e) {
+			this.cerrar();
+			return -1;
+		}
+	}
+	
+	public int actualizar_Cliente(String id, String telefono) {
+		String cadena = "UPDATE clientes SET TELEFONO='" + telefono + "' WHERE ID='"+id+"'";
 
 		try {
 			this.abrir();
