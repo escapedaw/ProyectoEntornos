@@ -125,9 +125,82 @@ public class BD_ReservaVisita extends BD_Conector {
 		}
 	}
 	
+	//DANI
+	public Vector<Visita> mostrarVisitas() {
+		Vector<Visita> v = new Vector<Visita>();
+		String cadena = "SELECT * FROM visitas";
+		try {
+			this.abrir();
+			s = c.createStatement();
+			reg = s.executeQuery(cadena);
+			while (reg.next()) {
+				java.sql.Date f = reg.getDate("fecha");
+				java.sql.Time h = reg.getTime("fecha");
+				LocalDate fBuena = f.toLocalDate();
+				LocalTime hBuena = h.toLocalTime();
+				LocalDateTime fechaHora = LocalDateTime.of(fBuena, hBuena);
+				v.add(new Visita(reg.getString("nsala"),reg.getString("id_emple"),reg.getString("nif_cliente"), fechaHora, reg.getDouble("tiempo"),
+						reg.getInt("npersonas"), reg.getInt("importe")));
+			}
+			s.close();
+			this.cerrar();
+			return v;
+		} catch (SQLException e) {
+			return null;
+		}
+	}
 	
+	//DANI
+	public Vector<Visita> mostrarVisitasID(String usuario) {
+		Vector<Visita> v = new Vector<Visita>();
+		String cadena = "SELECT * FROM visitas WHERE  nif_cliente = (SELECT NIF FROM clientes WHERE ID='"+usuario+"');";
+		try {
+			this.abrir();
+			s = c.createStatement();
+			reg = s.executeQuery(cadena);
+			while (reg.next()) {
+				java.sql.Date f = reg.getDate("fecha");
+				java.sql.Time h = reg.getTime("fecha");
+				LocalDate fBuena = f.toLocalDate();
+				LocalTime hBuena = h.toLocalTime();
+				LocalDateTime fechaHora = LocalDateTime.of(fBuena, hBuena);
+				v.add(new Visita(reg.getString("nsala"),reg.getString("id_emple"),reg.getString("nif_cliente"), fechaHora, reg.getDouble("tiempo"),
+						reg.getInt("npersonas"), reg.getInt("importe")));
+			}
+			s.close();
+			this.cerrar();
+			return v;
+		} catch (SQLException e) {
+			return null;
+		}
+	}
 	
-	
+	//DANI
+	public Vector<Reserva> mostrarReservasID(String usuario) {
+		Vector<Reserva> v = new Vector<Reserva>();
+		String cadena = "SELECT * FROM reservas WHERE  nif_cliente = (SELECT NIF FROM clientes WHERE ID='"+usuario+"');";
+
+		try {
+			this.abrir();
+			s = c.createStatement();
+			reg = s.executeQuery(cadena);
+			while (reg.next()) {
+				java.sql.Date f = reg.getDate("fecha");
+				java.sql.Time h = reg.getTime("fecha");
+				LocalDate fBuena = f.toLocalDate();
+				LocalTime hBuena = h.toLocalTime();
+				LocalDateTime fechaHora = LocalDateTime.of(fBuena, hBuena);
+				v.add(new Reserva(reg.getString("cod_reserva"), fechaHora, reg.getString("nsala"),
+						reg.getString("id_emple"), reg.getString("nif_cliente"), reg.getInt("npersonas"),
+						reg.getInt("importe")));
+			}
+			s.close();
+			this.cerrar();
+			return v;
+		} catch (SQLException e) {
+			return null;
+		}
+	}
 	
 	// RIKI:
 	

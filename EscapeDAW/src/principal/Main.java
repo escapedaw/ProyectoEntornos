@@ -1,6 +1,5 @@
 package principal;
 
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.InputMismatchException;
@@ -10,7 +9,6 @@ import java.util.Vector;
 import bbdd.*;
 import modelos.*;
 
-
 public class Main {
 	static Scanner sc = new Scanner(System.in);
 	static BD_Credenciales bdCre = new BD_Credenciales();
@@ -18,6 +16,7 @@ public class Main {
 	static BD_PistaSala bdPisSal = new BD_PistaSala();
 	static BD_ReservaVisita bdResVis = new BD_ReservaVisita();
 	static BD_Conector conector = new BD_Conector();
+
 	public static void main(String[] args) {
 		BD_Conector.BD_Ini("escapedaw");
 
@@ -46,7 +45,7 @@ public class Main {
 						menuEmpleado(usuario);
 						break;
 					case "C":
-						System.out.println("MENU CLIENTE");
+						menuCliente(usuario);
 						break;
 					default:
 						System.out.println("¡Datos incorrectos!");
@@ -210,7 +209,7 @@ public class Main {
 
 	public static void menuJefeEmpleados(String usuario) {
 		int opc = 0;
-		int sueldo=0;
+		int sueldo = 0;
 		String idemp;
 		do {
 			try {
@@ -235,7 +234,7 @@ public class Main {
 					System.out.println("Introduce NIF:");
 					String nif = sc.nextLine();
 					int id = conector.consultaNumeroSecuencial("ID", "empleados", "EM");
-					String ident="EM"+(id+1);
+					String ident = "EM" + (id + 1);
 					System.out.println("Introduce nombre:");
 					String nombre = sc.nextLine();
 					System.out.println("Introduce apellido:");
@@ -257,8 +256,8 @@ public class Main {
 					System.out.println("Introduce id empleado:");
 					idemp = sc.nextLine();
 					try {
-					System.out.println("Introduce nuevo sueldo:");
-					sueldo = sc.nextInt();
+						System.out.println("Introduce nuevo sueldo:");
+						sueldo = sc.nextInt();
 					} catch (InputMismatchException e) {
 						System.out.println("\nHas introducido un caracter no válido");
 					}
@@ -306,10 +305,10 @@ public class Main {
 			}
 		} while (opc != 5);
 	}
-	
+
 	public static void menuJefeSala(String usuario) {
 		int opc = 0;
-		int precio=0;
+		int precio = 0;
 		do {
 			try {
 				System.out.println("\nGESTIONAR SALAS");
@@ -331,7 +330,7 @@ public class Main {
 						System.out.println("No hay salas creadas actualmente");
 					break;
 				case 2:
-					String nSala=Sala.calcularNumeroSala("nSala", "salas", "SA");
+					String nSala = Sala.calcularNumeroSala("nSala", "salas", "SA");
 					System.out.println(nSala);
 					System.out.println("Tipo sala:");
 					String tipo = sc.nextLine();
@@ -352,13 +351,13 @@ public class Main {
 					System.out.println("Introduce número sala:");
 					nSala = sc.nextLine();
 					try {
-					System.out.println("Introduce nuevo precio sala:");
-					precio = sc.nextInt();
+						System.out.println("Introduce nuevo precio sala:");
+						precio = sc.nextInt();
 					} catch (InputMismatchException e) {
 						System.out.println("\nHas introducido un caracter no válido");
 					}
 					sc.nextLine();
-					Sala sa=new Sala(nSala,precio);
+					Sala sa = new Sala(nSala, precio);
 					int actuPrecio = bdPisSal.modificarPrecio(sa);
 					switch (actuPrecio) {
 					case -1:
@@ -376,22 +375,22 @@ public class Main {
 				case 4:
 					Vector<String> v = new Vector<String>();
 					v = bdCliEmpJef.mostrarIdEmpleados();
-					for(int i=0;i<v.size();i++) {
+					for (int i = 0; i < v.size(); i++) {
 						System.out.println(v.get(i));
 					}
-					if(v.size()==0)
+					if (v.size() == 0)
 						System.out.println("No hay empleados actualmente");
 					else {
 						System.out.println("Empleado:");
-						String empleado=sc.nextLine();
+						String empleado = sc.nextLine();
 						Vector<Sala> vs = new Vector<Sala>();
 						vs = bdPisSal.listarSalas();
-						for(int i=0;i<vs.size();i++) {
+						for (int i = 0; i < vs.size(); i++) {
 							System.out.println(vs.get(i).toString());
 						}
 						System.out.println("Sala:");
-						nSala=sc.nextLine();
-						int actuEmple = bdPisSal.modificarIdEmple(empleado,nSala);
+						nSala = sc.nextLine();
+						int actuEmple = bdPisSal.modificarIdEmple(empleado, nSala);
 						switch (actuEmple) {
 						case -1:
 							System.out.println("\nFallo técnico, póngase en contacto con el administrador");
@@ -404,18 +403,18 @@ public class Main {
 							break;
 						}
 					}
-					
+
 					break;
 				case 5:
 					Vector<Sala> vs = new Vector<Sala>();
 					vs = bdPisSal.listarSalas();
-					for(int i=0;i<vs.size();i++) {
+					for (int i = 0; i < vs.size(); i++) {
 						System.out.println(vs.get(i).toString());
 					}
 					System.out.println("Sala:");
-					nSala=sc.nextLine();
+					nSala = sc.nextLine();
 
-					int eliminar = bdPisSal.borrarSala(nSala) ;
+					int eliminar = bdPisSal.borrarSala(nSala);
 					switch (eliminar) {
 					case -1:
 						System.out.println("\nFallo técnico, póngase en contacto con el administrador");
@@ -440,7 +439,7 @@ public class Main {
 			}
 		} while (opc != 6);
 	}
-	
+
 	public static void menuJefeCliente() {
 		Vector<Cliente> ve = bdCliEmpJef.mostrarClientes();
 		for (int i = 0; i < ve.size(); i++)
@@ -448,7 +447,7 @@ public class Main {
 		if (ve.size() == 0)
 			System.out.println("No hay clientes actualmente");
 	}
-	
+
 	public static void menuJefeReserva() {
 		Vector<Reserva> ve = bdResVis.mostrarReservas();
 		for (int i = 0; i < ve.size(); i++)
@@ -456,19 +455,24 @@ public class Main {
 		if (ve.size() == 0)
 			System.out.println("No hay reservas actualmente");
 	}
-	
+
 	public static void menuJefeVisita() {
-		/*Vector<Reserva> ve = bdResVis;
-		for (int i = 0; i < ve.size(); i++)
-			System.out.println(ve.get(i).toString());
-		if (ve.size() == 0)
-			System.out.println("No hay reservas actualmente");*/
+		Vector<Visita> vVis = bdResVis.mostrarVisitas();
+		if (vVis == null)
+			System.out
+					.println("\nHa surgido un problema técnico. Póngase en contacto con el administrador");
+		else if (vVis.size() == 0)
+			System.out.println("\nNo hay visitas actualmente");
+		else {
+			for (int i = 0; i < vVis.size(); i++)
+				System.out.println(vVis.get(i).toString());
+		}
 	}
-	
+
 	public static void menuJefeFacturacion() {
 		/**/
 	}
-	
+
 	public static void menuEmpleado(String usuario) {
 		int opc = 0;
 		do {
@@ -494,10 +498,10 @@ public class Main {
 					menuEmpleadoReservas(usuario);
 					break;
 				case 4:
-					//menuEmpleadoPistas();
+					// menuEmpleadoPistas();
 					break;
 				case 5:
-					//Ver visitas
+					// Ver visitas
 					break;
 				case 6:
 					System.out.println("Desconectado");
@@ -512,7 +516,7 @@ public class Main {
 			}
 		} while (opc != 6);
 	}
-	
+
 	public static void menuEmpleadoCredenciales(String usuario) {
 		int opc = 0;
 		String id;
@@ -582,7 +586,7 @@ public class Main {
 			}
 		} while (opc != 3);
 	}
-	
+
 	public static void menuEmpleadoClientes(String usuario) {
 		int opc = 0;
 		String idcli, telefono;
@@ -609,7 +613,7 @@ public class Main {
 					System.out.println("Introduce NIF:");
 					String nif = sc.nextLine();
 					int id = conector.consultaNumeroSecuencial("ID", "clientes", "CL");
-					String ident="CL"+(id+1);
+					String ident = "CL" + (id + 1);
 					System.out.println("Introduce nombre:");
 					String nombre = sc.nextLine();
 					System.out.println("Introduce apellido:");
@@ -672,7 +676,7 @@ public class Main {
 			}
 		} while (opc != 5);
 	}
-	
+
 	public static void menuEmpleadoReservas(String usuario) {
 		int opc = 0;
 		DateTimeFormatter fechaFormateada = DateTimeFormatter.ofPattern("dd/LL/yyyy HH:mm");
@@ -701,10 +705,10 @@ public class Main {
 					String fechaLeida = sc.nextLine();
 					System.out.println("Introduce hora (hh:mm):");
 					String horaLeida = sc.nextLine();
-					String fechaHoraLeida=fechaLeida+" "+horaLeida;
+					String fechaHoraLeida = fechaLeida + " " + horaLeida;
 					LocalDateTime fecha = LocalDateTime.parse(fechaHoraLeida, fechaFormateada);
 					int id = conector.consultaNumeroSecuencial("COD_RESERVA", "reservas", "RE");
-					String ident="RE"+(id+1);
+					String ident = "RE" + (id + 1);
 					System.out.println("Introduce nSala:");
 					String nSala = sc.nextLine();
 					System.out.println("Introduce nif cliente:");
@@ -720,32 +724,32 @@ public class Main {
 					break;
 				case 3:
 					System.out.println("Introduzca código reserva que desea modificar:");
-					String codR=sc.nextLine();
+					String codR = sc.nextLine();
 					System.out.println("Introduzca número de personas:");
-					int numP=sc.nextInt();
+					int numP = sc.nextInt();
 					sc.nextLine();
-					if (bdResVis.modificarPersonasReserva(codR,numP) == 1)
+					if (bdResVis.modificarPersonasReserva(codR, numP) == 1)
 						System.out.println("Modificado");
 					else
 						System.out.println("No se ha podido modificar");
 					break;
 				case 4:
 					System.out.println("Introduzca código reserva que desea modificar:");
-					codR=sc.nextLine();
+					codR = sc.nextLine();
 					System.out.println("Introduce fecha (dd/mm/aaaa):");
 					fechaLeida = sc.nextLine();
 					System.out.println("Introduce hora (hh:mm):");
 					horaLeida = sc.nextLine();
-					fechaHoraLeida=fechaLeida+" "+horaLeida;
+					fechaHoraLeida = fechaLeida + " " + horaLeida;
 					fecha = LocalDateTime.parse(fechaHoraLeida, fechaFormateada);
-					if (bdResVis.modificarFechaReserva(fecha,codR) == 1)
+					if (bdResVis.modificarFechaReserva(fecha, codR) == 1)
 						System.out.println("Modificado");
 					else
 						System.out.println("No se ha podido modificar");
 					break;
 				case 5:
 					System.out.println("Introduzca código reserva que desea modificar:");
-					codR=sc.nextLine();
+					codR = sc.nextLine();
 					if (bdResVis.eliminarReserva(codR) == 1)
 						System.out.println("Eliminada");
 					else
@@ -762,5 +766,77 @@ public class Main {
 				System.out.println("\nHas introducido un caracter no válido");
 			}
 		} while (opc != 6);
+	}
+
+	public static void menuCliente(String usuario) {
+		int opc = 0;
+		do {
+			try {
+				System.out.println("\nMENU CLIENTE");
+				System.out.println("1. Modificar contraseña");
+				System.out.println("2. Ver mis visitas");
+				System.out.println("3. Ver mis reservas");
+				System.out.println("4. Gestionar juego");
+				System.out.println("5. Desconectarse");
+
+				opc = sc.nextInt();
+				sc.nextLine();
+				switch (opc) {
+				case 1:
+					System.out.println("Introduce nueva contraseña:");
+					String contraseña = sc.nextLine();
+
+					int contra = bdCre.cambiar_clave(usuario, contraseña);
+					switch (contra) {
+					case -1:
+						System.out.println("\nFallo técnico, póngase en contacto con el administrador");
+						break;
+					case 0:
+						System.out.println("\nEn estos momentos no podemos atender su solicitud");
+						break;
+					default:
+						System.out.println("\nCambiada correctamente");
+						break;
+					}
+					break;
+				case 2:
+					Vector<Visita> vVis = bdResVis.mostrarVisitasID(usuario);
+					if (vVis == null)
+						System.out
+								.println("\nHa surgido un problema técnico. Póngase en contacto con el administrador");
+					else if (vVis.size() == 0)
+						System.out.println("\nNo hay visitas actualmente");
+					else {
+						for (int i = 0; i < vVis.size(); i++)
+							System.out.println(vVis.get(i).toString());
+					}
+					break;
+				case 3:
+					Vector<Reserva> vRes = bdResVis.mostrarReservasID(usuario);
+					if (vRes == null)
+						System.out
+								.println("\nHa surgido un problema técnico. Póngase en contacto con el administrador");
+					else if (vRes.size() == 0)
+						System.out.println("\nNo hay reservas actualmente");
+					else {
+						for (int i = 0; i < vRes.size(); i++)
+							System.out.println(vRes.get(i).toString());
+					}
+					break;
+				case 4:
+					// menuClienteJuego();
+					break;
+				case 5:
+					System.out.println("Desconectado");
+					break;
+				default:
+					System.out.println("Opción incorrecta");
+					break;
+				}
+			} catch (InputMismatchException e) {
+				sc.nextLine();
+				System.out.println("\nHas introducido un caracter no válido");
+			}
+		} while (opc != 5);
 	}
 }

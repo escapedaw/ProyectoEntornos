@@ -1,16 +1,20 @@
 package modelos;
 
+import java.time.LocalDateTime;
+
 public class Visita {
 
 	private String nsala;
 	private String id_emple;
 	private String nif_cliente;
-	private String fecha;
-	private String tiempo;
+	private LocalDateTime fecha;
+	private double tiempo;
 	private int nPersonas;
 	private int importe;
 	
-	public Visita(String nsala, String id_emple, String nif_cliente, String fecha, String tiempo, int nPersonas,
+
+
+	public Visita(String nsala, String id_emple, String nif_cliente, LocalDateTime fecha, double tiempo, int nPersonas,
 			int importe) {
 		super();
 		this.nsala = nsala;
@@ -34,11 +38,11 @@ public class Visita {
 		return nif_cliente;
 	}
 
-	public String getFecha() {
+	public LocalDateTime getFecha() {
 		return fecha;
 	}
 
-	public String getTiempo() {
+	public double getTiempo() {
 		return tiempo;
 	}
 
@@ -49,10 +53,11 @@ public class Visita {
 	public int getImporte() {
 		return importe;
 	}
-	
-	
-	
-	
-	
-	
+
+	@Override
+	public String toString() {
+		return "Visita [nsala=" + nsala + ", id_emple=" + id_emple + ", nif_cliente=" + nif_cliente + ", fecha=" + fecha
+				+ ", tiempo=" + tiempo + ", nPersonas=" + nPersonas + ", importe=" + importe + "]";
+	}
+
 }
