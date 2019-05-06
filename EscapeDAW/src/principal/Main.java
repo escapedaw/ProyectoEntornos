@@ -1,13 +1,28 @@
 package principal;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.Vector;
+import java.time.temporal.ChronoUnit;
 
-import bbdd.*;
-import modelos.*;
+import javax.swing.Timer;
+
+import bbdd.BD_CliEmpJef;
+import bbdd.BD_Conector;
+import bbdd.BD_Credenciales;
+import bbdd.BD_PistaSala;
+import bbdd.BD_ReservaVisita;
+import modelos.Cliente;
+import modelos.Credencial;
+import modelos.Empleado;
+import modelos.Reserva;
+import modelos.Sala;
+import modelos.Visita;
 
 public class Main {
 	static Scanner sc = new Scanner(System.in);
@@ -776,7 +791,7 @@ public class Main {
 				System.out.println("1. Modificar contraseña");
 				System.out.println("2. Ver mis visitas");
 				System.out.println("3. Ver mis reservas");
-				System.out.println("4. Gestionar juego");
+				System.out.println("4. Empezar juego");
 				System.out.println("5. Desconectarse");
 
 				opc = sc.nextInt();
@@ -824,7 +839,10 @@ public class Main {
 					}
 					break;
 				case 4:
-					// menuClienteJuego();
+					if(bdResVis.poderJugar(usuario))
+						menuClienteJuego(usuario);
+					else
+						System.out.println("No tienes una reserva hoy");
 					break;
 				case 5:
 					System.out.println("Desconectado");
@@ -838,5 +856,57 @@ public class Main {
 				System.out.println("\nHas introducido un caracter no válido");
 			}
 		} while (opc != 5);
+	}
+	
+	public static void menuClienteJuego(String usuario) {
+		int opc = 0;
+		Timer timer = new Timer(3600000, new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("SE ACABO EL TIEMPO");
+				//Crear la visita guardando el tiempo
+				//Eliminar reserva
+				//Resetar pistas
+				//Mostrar el tiempo que ha tardado
+				//COMO SALE AL MENU ANTERIOR?
+			}
+		});
+		timer.start();
+		LocalTime horaInicio = LocalTime.now();
+		
+		do {
+			try {
+				System.out.println("\nMENU JUEGO");
+				System.out.println("1. Ver tiempo");
+				System.out.println("2. Solicitar pista");
+				System.out.println("3. Ver pista");
+				System.out.println("4. Finalizar juego");
+
+				opc = sc.nextInt();
+				sc.nextLine();
+				switch (opc) {
+				case 1:
+					System.out.println("Tiempo transcurrido: "+ChronoUnit.MINUTES.between(horaInicio, LocalTime.now()));
+					break;
+				case 2:
+					
+					break;
+				case 3:
+					
+					break;
+				case 4:
+					//Eliminar reserva
+					//Crear la visita guardando el tiempo
+					//Resetar pistas
+					break;
+				default:
+					System.out.println("Opción incorrecta");
+					break;
+				}
+			} catch (InputMismatchException e) {
+				sc.nextLine();
+				System.out.println("\nHas introducido un caracter no válido");
+			}
+		} while (opc != 4);
+		
 	}
 }

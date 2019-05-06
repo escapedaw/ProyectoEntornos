@@ -202,60 +202,24 @@ public class BD_ReservaVisita extends BD_Conector {
 		}
 	}
 	
-	// RIKI:
-	
-	/* esto es para que te coja el empleado asociado al cliente */
-	public String selectEmplePorDNI(String dni) {
-		String emple = " ";
-		String cadena = "SELECT id_emple FROM CLIENTES WHERE nif='" + dni + "'";
+	public boolean poderJugar(String usuario) {
+		String cadena = "SELECT * FROM reservas WHERE  nif_cliente = (SELECT NIF FROM clientes WHERE ID='"+usuario+"');";
+		LocalDate fechaActual=LocalDate.now();
 		try {
 			this.abrir();
 			s = c.createStatement();
 			reg = s.executeQuery(cadena);
-			if (reg.next()) {
-				emple = reg.getString("Id_emple");
+			while (reg.next()) {
+				java.sql.Date f = reg.getDate("fecha");
+				LocalDate fBuena = f.toLocalDate();
+				if(fechaActual.equals(fBuena))
+					return true;
 			}
 			s.close();
 			this.cerrar();
-			return emple;
+			return false;
 		} catch (SQLException e) {
-			return null;
-		}
-	}
-
-	public int selectPrecio(String numsala) {
-		int precio = 0;
-		String cadena = "SELECT Precio FROM SALAS WHERE nsala='" + numsala + "'";
-		try {
-			this.abrir();
-			s = c.createStatement();
-			reg = s.executeQuery(cadena);
-			if (reg.next()) {
-				precio = reg.getInt("Precio");
-			}
-			s.close();
-			this.cerrar();
-			return precio;
-		} catch (SQLException e) {
-			return 0;
-		}
-	}
-
-	public double selectNpersonas(String nif_cliente) {
-		int npersonas = 0;
-		String cadena = "SELECT npersonas FROM reservas WHERE nif_cliente='" + nif_cliente + "'";
-		try {
-			this.abrir();
-			s = c.createStatement();
-			reg = s.executeQuery(cadena);
-			if (reg.next()) {
-				npersonas = reg.getInt("npersonas");
-			}
-			s.close();
-			this.cerrar();
-			return npersonas;
-		} catch (SQLException e) {
-			return 0;
+			return false;
 		}
 	}
 
