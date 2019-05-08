@@ -31,6 +31,8 @@ public class Main {
 	static BD_PistaSala bdPisSal = new BD_PistaSala();
 	static BD_ReservaVisita bdResVis = new BD_ReservaVisita();
 	static BD_Conector conector = new BD_Conector();
+	static boolean checkJuego=false;
+	static Timer timer;
 
 	public static void main(String[] args) {
 		BD_Conector.BD_Ini("escapedaw");
@@ -516,7 +518,16 @@ public class Main {
 					// menuEmpleadoPistas();
 					break;
 				case 5:
-					// Ver visitas
+					Vector<Visita> vVis = bdResVis.mostrarVisitas();
+					if (vVis == null)
+						System.out
+								.println("\nHa surgido un problema técnico. Póngase en contacto con el administrador");
+					else if (vVis.size() == 0)
+						System.out.println("\nNo hay visitas actualmente");
+					else {
+						for (int i = 0; i < vVis.size(); i++)
+							System.out.println(vVis.get(i).toString());
+					}
 					break;
 				case 6:
 					System.out.println("Desconectado");
@@ -763,7 +774,99 @@ public class Main {
 						System.out.println("No se ha podido modificar");
 					break;
 				case 5:
+					System.out.println("Introduzca código reserva que desea eliminar:");
+					codR = sc.nextLine();
+					if (bdResVis.eliminarReserva(codR) == 1)
+						System.out.println("Eliminada");
+					else
+						System.out.println("No se ha podido eliminar");
+					break;
+				case 6:
+					break;
+				default:
+					System.out.println("Opción incorrecta");
+					break;
+				}
+			} catch (InputMismatchException e) {
+				sc.nextLine();
+				System.out.println("\nHas introducido un caracter no válido");
+			}
+		} while (opc != 6);
+	}
+	
+	public static void menuEmpleadoPistas(String usuario) { //FALTA ENTERO
+		//FALTA ENTERO
+		int opc = 0;
+		DateTimeFormatter fechaFormateada = DateTimeFormatter.ofPattern("dd/LL/yyyy HH:mm");
+		do {
+			try {
+				System.out.println("\nGESTIONAR RESERVAS");
+				System.out.println("1. Mostrar reservas");
+				System.out.println("2. Añadir reserva");
+				System.out.println("3. Modificar personas en reserva");
+				System.out.println("4. Modificar fecha en reserva");
+				System.out.println("5. Eliminar reserva");
+				System.out.println("6. Salir");
+
+				opc = sc.nextInt();
+				sc.nextLine();
+				switch (opc) {
+				case 1:
+					Vector<Reserva> ve = bdResVis.mostrarReservas();
+					for (int i = 0; i < ve.size(); i++)
+						System.out.println(ve.get(i).toString());
+					if (ve.size() == 0)
+						System.out.println("No hay reservas actualmente");
+					break;
+				case 2:
+					System.out.println("Introduce fecha (dd/mm/aaaa):");
+					String fechaLeida = sc.nextLine();
+					System.out.println("Introduce hora (hh:mm):");
+					String horaLeida = sc.nextLine();
+					String fechaHoraLeida = fechaLeida + " " + horaLeida;
+					LocalDateTime fecha = LocalDateTime.parse(fechaHoraLeida, fechaFormateada);
+					int id = conector.consultaNumeroSecuencial("COD_RESERVA", "reservas", "RE");
+					String ident = "RE" + (id + 1);
+					System.out.println("Introduce nSala:");
+					String nSala = sc.nextLine();
+					System.out.println("Introduce nif cliente:");
+					String nifCliente = sc.nextLine();
+					System.out.println("Introduce numero personas:");
+					int numPersonas = sc.nextInt();
+					sc.nextLine();
+					Reserva res = new Reserva(ident, fecha, nSala, usuario, nifCliente, numPersonas);
+					if (bdResVis.añadirReserva(res) == 1)
+						System.out.println("Añadido");
+					else
+						System.out.println("No se ha podido añadir");
+					break;
+				case 3:
 					System.out.println("Introduzca código reserva que desea modificar:");
+					String codR = sc.nextLine();
+					System.out.println("Introduzca número de personas:");
+					int numP = sc.nextInt();
+					sc.nextLine();
+					if (bdResVis.modificarPersonasReserva(codR, numP) == 1)
+						System.out.println("Modificado");
+					else
+						System.out.println("No se ha podido modificar");
+					break;
+				case 4:
+					System.out.println("Introduzca código reserva que desea modificar:");
+					codR = sc.nextLine();
+					System.out.println("Introduce fecha (dd/mm/aaaa):");
+					fechaLeida = sc.nextLine();
+					System.out.println("Introduce hora (hh:mm):");
+					horaLeida = sc.nextLine();
+					fechaHoraLeida = fechaLeida + " " + horaLeida;
+					fecha = LocalDateTime.parse(fechaHoraLeida, fechaFormateada);
+					if (bdResVis.modificarFechaReserva(fecha, codR) == 1)
+						System.out.println("Modificado");
+					else
+						System.out.println("No se ha podido modificar");
+					break;
+				case 5:
+					System.out.println("Introduzca código reserva que desea eliminar:");
 					codR = sc.nextLine();
 					if (bdResVis.eliminarReserva(codR) == 1)
 						System.out.println("Eliminada");
@@ -858,18 +961,17 @@ public class Main {
 		} while (opc != 5);
 	}
 	
-	public static void menuClienteJuego(String usuario) {
+	public static void menuClienteJuego(String usuario) { //FALTA PARTE PISTAS
 		int opc = 0;
-		Timer timer = new Timer(3600000, new ActionListener() {
+		long min=0, seg=0;
+		timer = new Timer(3600000, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("SE ACABO EL TIEMPO");
-				//Crear la visita guardando el tiempo
-				//Eliminar reserva
-				//Resetar pistas
-				//Mostrar el tiempo que ha tardado
-				//COMO SALE AL MENU ANTERIOR?
+				System.out.println("\n¡SE ACABO EL TIEMPO!");
+				checkJuego=juegoAcabado(60,0,usuario);
+				System.out.println("\nPulse una tecla para terminar");
 			}
 		});
+	
 		timer.start();
 		LocalTime horaInicio = LocalTime.now();
 		
@@ -883,9 +985,12 @@ public class Main {
 
 				opc = sc.nextInt();
 				sc.nextLine();
+				if(checkJuego) {
+					return;
+				}
 				switch (opc) {
 				case 1:
-					System.out.println("Tiempo transcurrido: "+ChronoUnit.MINUTES.between(horaInicio, LocalTime.now()));
+					System.out.println("Tiempo transcurrido: "+ChronoUnit.MINUTES.between(horaInicio, LocalTime.now())+" minutos, "+ChronoUnit.SECONDS.between(horaInicio, LocalTime.now())+" segundos");
 					break;
 				case 2:
 					
@@ -894,9 +999,9 @@ public class Main {
 					
 					break;
 				case 4:
-					//Eliminar reserva
-					//Crear la visita guardando el tiempo
-					//Resetar pistas
+					min=ChronoUnit.MINUTES.between(horaInicio, LocalTime.now());
+					seg=ChronoUnit.SECONDS.between(horaInicio, LocalTime.now());
+					checkJuego=juegoAcabado(min,seg,usuario);
 					break;
 				default:
 					System.out.println("Opción incorrecta");
@@ -904,9 +1009,30 @@ public class Main {
 				}
 			} catch (InputMismatchException e) {
 				sc.nextLine();
+				if(checkJuego)
+					return;
 				System.out.println("\nHas introducido un caracter no válido");
 			}
 		} while (opc != 4);
 		
+	}
+	
+	public static boolean juegoAcabado(long min, long seg, String usuario) {
+		System.out.println("\nHabéis tardado: "+min+" minutos, "+seg+" segundos.");
+		int id = conector.consultaNumeroSecuencial("COD_VISITA", "visitas", "VI");
+		String ident = "VI" + (id + 1);
+		if(bdResVis.añadirVisitaTrasJugar(usuario, min,ident)) {
+			System.out.println("\nVisita añadida en tu historial de visitas, puede verla en el menú principal");
+			if(bdResVis.eliminarReservaTrasJugar(usuario)==1)
+				System.out.println("Se ha procedido a eliminar su reserva.\n\n¡Gracias por vuestra visita!");
+			else
+				System.out.println("\nSe ha producido un error eliminando su reserva, por favor, póngase en contacto con el empleado de la sala");
+		}
+		else
+			System.out.println("\nSe ha producido un añadiendo su visita, por favor, póngase en contacto con el empleado de la sala");
+		
+		//RESETEAR PISTAS
+		timer.stop();
+		return true;
 	}
 }

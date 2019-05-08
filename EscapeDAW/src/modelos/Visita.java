@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 public class Visita {
 
+	private String cod_visita;
 	private String nsala;
 	private String id_emple;
 	private String nif_cliente;
@@ -12,11 +13,10 @@ public class Visita {
 	private int nPersonas;
 	private int importe;
 	
-
-
-	public Visita(String nsala, String id_emple, String nif_cliente, LocalDateTime fecha, double tiempo, int nPersonas,
-			int importe) {
+	public Visita(String cod_visita, String nsala, String id_emple, String nif_cliente, LocalDateTime fecha,
+			double tiempo, int nPersonas, int importe) {
 		super();
+		this.cod_visita = cod_visita;
 		this.nsala = nsala;
 		this.id_emple = id_emple;
 		this.nif_cliente = nif_cliente;
@@ -24,6 +24,10 @@ public class Visita {
 		this.tiempo = tiempo;
 		this.nPersonas = nPersonas;
 		this.importe = importe;
+	}
+
+	public String getCod_visita() {
+		return cod_visita;
 	}
 
 	public String getNsala() {
@@ -56,8 +60,14 @@ public class Visita {
 
 	@Override
 	public String toString() {
-		return "Visita [nsala=" + nsala + ", id_emple=" + id_emple + ", nif_cliente=" + nif_cliente + ", fecha=" + fecha
-				+ ", tiempo=" + tiempo + ", nPersonas=" + nPersonas + ", importe=" + importe + "]";
+		return "Visita [cod_visita=" + cod_visita + ", nsala=" + nsala + ", id_emple=" + id_emple + ", nif_cliente="
+				+ nif_cliente + ", fecha=" + fecha + ", tiempo=" + tiempo + ", nPersonas=" + nPersonas + ", importe="
+				+ importe + "]";
 	}
+	
+	
+
+
+	
 
 }

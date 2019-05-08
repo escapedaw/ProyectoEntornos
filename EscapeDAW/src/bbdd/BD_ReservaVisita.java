@@ -19,7 +19,7 @@ public class BD_ReservaVisita extends BD_Conector {
 		super();
 	}
 
-	//DANI
+	// DANI
 	public int añadirReserva(Reserva re) {
 
 		String cadena2 = "SELECT PRECIO FROM salas WHERE NSALA = '" + re.getnSala() + "';";
@@ -45,7 +45,7 @@ public class BD_ReservaVisita extends BD_Conector {
 
 	}
 
-	//DANI
+	// DANI
 	public Vector<Reserva> mostrarReservas() {
 		Vector<Reserva> v = new Vector<Reserva>();
 		String cadena = "SELECT * FROM reservas";
@@ -71,18 +71,20 @@ public class BD_ReservaVisita extends BD_Conector {
 		}
 	}
 
-	//DANI
+	// DANI
 	public double modificarPersonasReserva(String codR, int numP) {
 		String cadena;
-		String cadena2 = "SELECT PRECIO FROM salas WHERE NSALA = (SELECT NSALA FROM reservas WHERE COD_RESERVA = '" + codR + "');";
-		int precio=0;
+		String cadena2 = "SELECT PRECIO FROM salas WHERE NSALA = (SELECT NSALA FROM reservas WHERE COD_RESERVA = '"
+				+ codR + "');";
+		int precio = 0;
 		try {
 			this.abrir();
 			s = c.createStatement();
 			reg = s.executeQuery(cadena2);
 			if (reg.next())
 				precio = reg.getInt("precio");
-			cadena="UPDATE reservas SET NPERSONAS="+numP+", IMPORTE =" + precio*numP + "  WHERE COD_RESERVA ='" + codR + "'";
+			cadena = "UPDATE reservas SET NPERSONAS=" + numP + ", IMPORTE =" + precio * numP + "  WHERE COD_RESERVA ='"
+					+ codR + "'";
 			int filas = s.executeUpdate(cadena);
 			s.close();
 			this.cerrar();
@@ -91,10 +93,10 @@ public class BD_ReservaVisita extends BD_Conector {
 			return -1;
 		}
 	}
-	
-	//DANI
+
+	// DANI
 	public double modificarFechaReserva(LocalDateTime fecha, String codR) {
-		String cadena="UPDATE reservas SET FECHA='"+ fecha+"' WHERE COD_RESERVA ='" + codR + "';";
+		String cadena = "UPDATE reservas SET FECHA='" + fecha + "' WHERE COD_RESERVA ='" + codR + "';";
 		try {
 			this.abrir();
 			s = c.createStatement();
@@ -106,8 +108,8 @@ public class BD_ReservaVisita extends BD_Conector {
 			return -1;
 		}
 	}
-	
-	//DANI
+
+	// DANI
 	public int eliminarReserva(String cod_reserva) {
 		String cadena = "DELETE FROM reservas WHERE cod_reserva='" + cod_reserva + "'";
 
@@ -124,8 +126,8 @@ public class BD_ReservaVisita extends BD_Conector {
 			return -1;
 		}
 	}
-	
-	//DANI
+
+	// DANI
 	public Vector<Visita> mostrarVisitas() {
 		Vector<Visita> v = new Vector<Visita>();
 		String cadena = "SELECT * FROM visitas";
@@ -139,8 +141,8 @@ public class BD_ReservaVisita extends BD_Conector {
 				LocalDate fBuena = f.toLocalDate();
 				LocalTime hBuena = h.toLocalTime();
 				LocalDateTime fechaHora = LocalDateTime.of(fBuena, hBuena);
-				v.add(new Visita(reg.getString("nsala"),reg.getString("id_emple"),reg.getString("nif_cliente"), fechaHora, reg.getDouble("tiempo"),
-						reg.getInt("npersonas"), reg.getInt("importe")));
+				v.add(new Visita(reg.getString("cod_visita"),reg.getString("nsala"), reg.getString("id_emple"), reg.getString("nif_cliente"),
+						fechaHora, reg.getDouble("tiempo"), reg.getInt("npersonas"), reg.getInt("importe")));
 			}
 			s.close();
 			this.cerrar();
@@ -149,11 +151,12 @@ public class BD_ReservaVisita extends BD_Conector {
 			return null;
 		}
 	}
-	
-	//DANI
+
+	// DANI
 	public Vector<Visita> mostrarVisitasID(String usuario) {
 		Vector<Visita> v = new Vector<Visita>();
-		String cadena = "SELECT * FROM visitas WHERE  nif_cliente = (SELECT NIF FROM clientes WHERE ID='"+usuario+"');";
+		String cadena = "SELECT * FROM visitas WHERE  nif_cliente = (SELECT NIF FROM clientes WHERE ID='" + usuario
+				+ "');";
 		try {
 			this.abrir();
 			s = c.createStatement();
@@ -164,8 +167,8 @@ public class BD_ReservaVisita extends BD_Conector {
 				LocalDate fBuena = f.toLocalDate();
 				LocalTime hBuena = h.toLocalTime();
 				LocalDateTime fechaHora = LocalDateTime.of(fBuena, hBuena);
-				v.add(new Visita(reg.getString("nsala"),reg.getString("id_emple"),reg.getString("nif_cliente"), fechaHora, reg.getDouble("tiempo"),
-						reg.getInt("npersonas"), reg.getInt("importe")));
+				v.add(new Visita(reg.getString("cod_visita"),reg.getString("nsala"), reg.getString("id_emple"), reg.getString("nif_cliente"),
+						fechaHora, reg.getDouble("tiempo"), reg.getInt("npersonas"), reg.getInt("importe")));
 			}
 			s.close();
 			this.cerrar();
@@ -174,11 +177,12 @@ public class BD_ReservaVisita extends BD_Conector {
 			return null;
 		}
 	}
-	
-	//DANI
+
+	// DANI
 	public Vector<Reserva> mostrarReservasID(String usuario) {
 		Vector<Reserva> v = new Vector<Reserva>();
-		String cadena = "SELECT * FROM reservas WHERE  nif_cliente = (SELECT NIF FROM clientes WHERE ID='"+usuario+"');";
+		String cadena = "SELECT * FROM reservas WHERE  nif_cliente = (SELECT NIF FROM clientes WHERE ID='" + usuario
+				+ "');";
 
 		try {
 			this.abrir();
@@ -201,10 +205,11 @@ public class BD_ReservaVisita extends BD_Conector {
 			return null;
 		}
 	}
-	
+
 	public boolean poderJugar(String usuario) {
-		String cadena = "SELECT * FROM reservas WHERE  nif_cliente = (SELECT NIF FROM clientes WHERE ID='"+usuario+"');";
-		LocalDate fechaActual=LocalDate.now();
+		String cadena = "SELECT * FROM reservas WHERE  nif_cliente = (SELECT NIF FROM clientes WHERE ID='" + usuario
+				+ "');";
+		LocalDate fechaActual = LocalDate.now();
 		try {
 			this.abrir();
 			s = c.createStatement();
@@ -212,7 +217,7 @@ public class BD_ReservaVisita extends BD_Conector {
 			while (reg.next()) {
 				java.sql.Date f = reg.getDate("fecha");
 				LocalDate fBuena = f.toLocalDate();
-				if(fechaActual.equals(fBuena))
+				if (fechaActual.equals(fBuena))
 					return true;
 			}
 			s.close();
@@ -223,20 +228,62 @@ public class BD_ReservaVisita extends BD_Conector {
 		}
 	}
 
-	
-	public boolean añadirVisita(Visita vi) {
-		String cadena = "INSERT INTO visitas VALUES('" + vi.getNsala() + "','" + vi.getId_emple() + "','"
-				+ vi.getNif_cliente() + "','" + vi.getFecha() + "','" + vi.getTiempo() + "')";
+	public int eliminarReservaTrasJugar(String id) {
+		LocalDate fecha = LocalDate.now();
+		String cadena = "DELETE FROM reservas WHERE NIF_CLIENTE = (SELECT NIF FROM clientes WHERE ID='" + id
+				+ "') AND FECHA LIKE '" + fecha + "%';";
 
 		try {
 			this.abrir();
 			s = c.createStatement();
-			s.executeUpdate(cadena);
+			int filas = s.executeUpdate(cadena);
 			s.close();
 			this.cerrar();
-			return true;
+			return filas;
+
 		} catch (SQLException e) {
 			this.cerrar();
+			return -1;
+		}
+	}
+
+
+	public boolean añadirVisitaTrasJugar(String usuario, long min,String id) {
+		double minut = Double.parseDouble(Long.toString(min));
+		LocalDate fecha = LocalDate.now();
+		String cadena1 = "SELECT * FROM reservas WHERE  nif_cliente = (SELECT NIF FROM clientes WHERE ID='" + usuario
+				+ "')AND FECHA LIKE '" + fecha + "%';";
+		try {
+			this.abrir();
+			s = c.createStatement();
+			reg = s.executeQuery(cadena1);
+			if (reg.next()) {
+				java.sql.Date f = reg.getDate("fecha");
+				java.sql.Time h = reg.getTime("fecha");
+				LocalDate fBuena = f.toLocalDate();
+				LocalTime hBuena = h.toLocalTime();
+				LocalDateTime fechaHora = LocalDateTime.of(fBuena, hBuena);
+				String cadena = "INSERT INTO visitas VALUES('"+id+"','" + reg.getString("NSALA") + "','"
+						+ reg.getString("ID_EMPLE") + "','" + reg.getString("NIF_CLIENTE") + "','" + fechaHora + "',"
+						+ minut + ","+reg.getInt("NPERSONAS")+","+reg.getInt("IMPORTE")+")";
+
+				try {
+					this.abrir();
+					s = c.createStatement();
+					s.executeUpdate(cadena);
+					s.close();
+					this.cerrar();
+					return true;
+				} catch (SQLException e) {
+					this.cerrar();
+					return false;
+				}
+
+			}
+			s.close();
+			this.cerrar();
+			return false;
+		} catch (SQLException e) {
 			return false;
 		}
 

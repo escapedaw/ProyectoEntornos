@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 04-05-2019 a las 14:27:25
+-- Tiempo de generación: 08-05-2019 a las 14:03:36
 -- Versión del servidor: 5.7.24
 -- Versión de PHP: 7.2.14
 
@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS `credenciales` (
 --
 
 INSERT INTO `credenciales` (`USUARIO`, `PASSWORD`, `ROL`) VALUES
-('CL1', 'EE', 'C'),
+('CL1', 'II', 'C'),
 ('EM1', 'juan', 'E'),
 ('JE1', 'AA', 'J');
 
@@ -159,21 +159,11 @@ CREATE TABLE IF NOT EXISTS `reservas` (
   `NPERSONAS` int(10) NOT NULL,
   `IMPORTE` int(3) NOT NULL,
   PRIMARY KEY (`COD_RESERVA`),
+  UNIQUE KEY `FECHA_NSALA_UNI` (`FECHA`,`NSALA`),
   KEY `ID_EMPLE` (`ID_EMPLE`),
   KEY `NIF_CLIENTE` (`NIF_CLIENTE`),
-  KEY `NPERSONAS` (`NPERSONAS`),
   KEY `NSALA` (`NSALA`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `reservas`
---
-
-INSERT INTO `reservas` (`COD_RESERVA`, `FECHA`, `NSALA`, `ID_EMPLE`, `NIF_CLIENTE`, `NPERSONAS`, `IMPORTE`) VALUES
-('RE1', '2020-05-12 00:00:00', 'SA1', 'EM1', '55', 4, 0),
-('RE2', '2019-05-05 20:45:00', 'SA1', 'EM1', '55', 5, 0),
-('RE3', '2019-05-25 12:45:00', 'SA1', 'EM1', '55', 6, 30),
-('RE4', '2019-05-15 12:45:00', 'SA1', 'EM1', '55', 4, 30);
 
 -- --------------------------------------------------------
 
@@ -211,18 +201,26 @@ INSERT INTO `salas` (`NSALA`, `ID_EMPLE`, `ID_JEFE`, `TIPO`, `DIFICULTAD`, `NPER
 
 DROP TABLE IF EXISTS `visitas`;
 CREATE TABLE IF NOT EXISTS `visitas` (
+  `COD_VISITA` varchar(4) NOT NULL,
   `NSALA` varchar(9) NOT NULL,
   `ID_EMPLE` varchar(4) NOT NULL,
   `NIF_CLIENTE` varchar(4) NOT NULL,
-  `FECHA` date NOT NULL,
-  `TIEMPO` date NOT NULL,
+  `FECHA` datetime NOT NULL,
+  `TIEMPO` double NOT NULL,
   `NPERSONAS` int(2) NOT NULL,
   `IMPORTE` int(3) NOT NULL,
+  PRIMARY KEY (`COD_VISITA`),
   KEY `ID_EMPLE` (`ID_EMPLE`,`NIF_CLIENTE`),
   KEY `NIF_CLIENTE` (`NIF_CLIENTE`),
-  KEY `NSALA` (`NSALA`),
-  KEY `NPERSONAS` (`NPERSONAS`)
+  KEY `NSALA` (`NSALA`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `visitas`
+--
+
+INSERT INTO `visitas` (`COD_VISITA`, `NSALA`, `ID_EMPLE`, `NIF_CLIENTE`, `FECHA`, `TIEMPO`, `NPERSONAS`, `IMPORTE`) VALUES
+('VI1', 'SA1', 'EM1', '55', '2019-05-08 12:00:00', 0, 5, 150);
 
 --
 -- Restricciones para tablas volcadas
@@ -267,8 +265,7 @@ ALTER TABLE `salas`
 ALTER TABLE `visitas`
   ADD CONSTRAINT `visitas_ibfk_1` FOREIGN KEY (`ID_EMPLE`) REFERENCES `empleados` (`ID`),
   ADD CONSTRAINT `visitas_ibfk_2` FOREIGN KEY (`NIF_CLIENTE`) REFERENCES `clientes` (`NIF`),
-  ADD CONSTRAINT `visitas_ibfk_3` FOREIGN KEY (`NSALA`) REFERENCES `salas` (`NSALA`),
-  ADD CONSTRAINT `visitas_ibfk_4` FOREIGN KEY (`NPERSONAS`) REFERENCES `reservas` (`NPERSONAS`);
+  ADD CONSTRAINT `visitas_ibfk_3` FOREIGN KEY (`NSALA`) REFERENCES `salas` (`NSALA`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
