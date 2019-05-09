@@ -206,7 +206,7 @@ public class BD_ReservaVisita extends BD_Conector {
 		}
 	}
 
-	public boolean poderJugar(String usuario) {
+	public String poderJugar(String usuario) {
 		String cadena = "SELECT * FROM reservas WHERE  nif_cliente = (SELECT NIF FROM clientes WHERE ID='" + usuario
 				+ "');";
 		LocalDate fechaActual = LocalDate.now();
@@ -218,13 +218,13 @@ public class BD_ReservaVisita extends BD_Conector {
 				java.sql.Date f = reg.getDate("fecha");
 				LocalDate fBuena = f.toLocalDate();
 				if (fechaActual.equals(fBuena))
-					return true;
+					return reg.getString("NSALA");
 			}
 			s.close();
 			this.cerrar();
-			return false;
+			return "0";
 		} catch (SQLException e) {
-			return false;
+			return "-1";
 		}
 	}
 
@@ -287,5 +287,23 @@ public class BD_ReservaVisita extends BD_Conector {
 			return false;
 		}
 
+	}
+	
+	public int facturacion(LocalDate fechaInicio, LocalDate fechaFin) {
+		String cadena = "SELECT SUM(IMPORTE) FROM visitas WHERE FECHA BETWEEN '"+fechaInicio+"%' AND '"+fechaFin+"%';";
+		
+		try {
+			this.abrir();
+			s = c.createStatement();
+			reg = s.executeQuery(cadena);
+			if (reg.next()) {
+				return reg.getInt(1);
+			}
+			s.close();
+			this.cerrar();
+		} catch (SQLException e) {
+			return -1;
+		}
+		return 0;
 	}
 }

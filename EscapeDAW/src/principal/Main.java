@@ -2,6 +2,7 @@ package principal;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -20,6 +21,7 @@ import bbdd.BD_ReservaVisita;
 import modelos.Cliente;
 import modelos.Credencial;
 import modelos.Empleado;
+import modelos.Pista;
 import modelos.Reserva;
 import modelos.Sala;
 import modelos.Visita;
@@ -487,7 +489,15 @@ public class Main {
 	}
 
 	public static void menuJefeFacturacion() {
-		/**/
+		DateTimeFormatter fechaFormateada = DateTimeFormatter.ofPattern("dd/LL/yyyy");
+		String fechaInicio, fechaFin;
+		System.out.println("Introduce fecha inicio (dd/mm/aaaa):");
+		fechaInicio = sc.nextLine();
+		System.out.println("Introduce fecha fin (dd/mm/aaaa):");
+		fechaFin = sc.nextLine();
+		LocalDate fechaI = LocalDate.parse(fechaInicio, fechaFormateada);
+		LocalDate fechaF = LocalDate.parse(fechaFin, fechaFormateada);
+		System.out.println("\nImporte: "+ bdResVis.facturacion(fechaI, fechaF)+" euros.");
 	}
 
 	public static void menuEmpleado(String usuario) {
@@ -515,7 +525,7 @@ public class Main {
 					menuEmpleadoReservas(usuario);
 					break;
 				case 4:
-					// menuEmpleadoPistas();
+					menuEmpleadoPistas(usuario);
 					break;
 				case 5:
 					Vector<Visita> vVis = bdResVis.mostrarVisitas();
@@ -794,86 +804,94 @@ public class Main {
 		} while (opc != 6);
 	}
 	
-	public static void menuEmpleadoPistas(String usuario) { //FALTA ENTERO
-		//FALTA ENTERO
+	public static void menuEmpleadoPistas(String usuario) {
 		int opc = 0;
-		DateTimeFormatter fechaFormateada = DateTimeFormatter.ofPattern("dd/LL/yyyy HH:mm");
 		do {
 			try {
-				System.out.println("\nGESTIONAR RESERVAS");
-				System.out.println("1. Mostrar reservas");
-				System.out.println("2. Añadir reserva");
-				System.out.println("3. Modificar personas en reserva");
-				System.out.println("4. Modificar fecha en reserva");
-				System.out.println("5. Eliminar reserva");
-				System.out.println("6. Salir");
+				System.out.println("\nGESTIONAR PISTAS");
+				System.out.println("1. Mostrar pistas");
+				System.out.println("2. Añadir pista");
+				System.out.println("3. Modificar descripción pista");
+				System.out.println("4. Eliminar pista");
+				System.out.println("5. Ver pista solicitada");
+				System.out.println("6. Confirmar pista solicitada");
+				System.out.println("7. Resetear pistas");
+				System.out.println("8. Salir");
 
 				opc = sc.nextInt();
 				sc.nextLine();
 				switch (opc) {
 				case 1:
-					Vector<Reserva> ve = bdResVis.mostrarReservas();
+					Vector<Pista> ve = bdPisSal.listarPistas();
 					for (int i = 0; i < ve.size(); i++)
 						System.out.println(ve.get(i).toString());
 					if (ve.size() == 0)
-						System.out.println("No hay reservas actualmente");
+						System.out.println("No hay pistas actualmente");
 					break;
 				case 2:
-					System.out.println("Introduce fecha (dd/mm/aaaa):");
-					String fechaLeida = sc.nextLine();
-					System.out.println("Introduce hora (hh:mm):");
-					String horaLeida = sc.nextLine();
-					String fechaHoraLeida = fechaLeida + " " + horaLeida;
-					LocalDateTime fecha = LocalDateTime.parse(fechaHoraLeida, fechaFormateada);
-					int id = conector.consultaNumeroSecuencial("COD_RESERVA", "reservas", "RE");
-					String ident = "RE" + (id + 1);
-					System.out.println("Introduce nSala:");
-					String nSala = sc.nextLine();
-					System.out.println("Introduce nif cliente:");
-					String nifCliente = sc.nextLine();
-					System.out.println("Introduce numero personas:");
-					int numPersonas = sc.nextInt();
-					sc.nextLine();
-					Reserva res = new Reserva(ident, fecha, nSala, usuario, nifCliente, numPersonas);
-					if (bdResVis.añadirReserva(res) == 1)
-						System.out.println("Añadido");
+					int id = conector.consultaNumeroSecuencial("COD_PISTA", "pistas", "PI");
+					String ident = "PI" + (id + 1);
+					System.out.println("Introduce a qué sala pertenece:");
+					String nsala = sc.nextLine();
+					System.out.println("Introduce descripción pista:");
+					String descripcion = sc.nextLine();
+					
+					Pista pis = new Pista (ident,nsala,descripcion);
+					if (bdPisSal.crearPista(pis) == 1)
+						System.out.println("Añadida la pista");
 					else
 						System.out.println("No se ha podido añadir");
 					break;
 				case 3:
-					System.out.println("Introduzca código reserva que desea modificar:");
-					String codR = sc.nextLine();
-					System.out.println("Introduzca número de personas:");
-					int numP = sc.nextInt();
-					sc.nextLine();
-					if (bdResVis.modificarPersonasReserva(codR, numP) == 1)
+					System.out.println("Introduzca código de la pista que desea modificar:");
+					String codP = sc.nextLine();
+					System.out.println("Introduzca la nueva descripción:");
+					descripcion = sc.nextLine();
+					if (bdPisSal.modificarDescripcion(descripcion,codP) == 1)
 						System.out.println("Modificado");
 					else
 						System.out.println("No se ha podido modificar");
 					break;
 				case 4:
-					System.out.println("Introduzca código reserva que desea modificar:");
-					codR = sc.nextLine();
-					System.out.println("Introduce fecha (dd/mm/aaaa):");
-					fechaLeida = sc.nextLine();
-					System.out.println("Introduce hora (hh:mm):");
-					horaLeida = sc.nextLine();
-					fechaHoraLeida = fechaLeida + " " + horaLeida;
-					fecha = LocalDateTime.parse(fechaHoraLeida, fechaFormateada);
-					if (bdResVis.modificarFechaReserva(fecha, codR) == 1)
-						System.out.println("Modificado");
-					else
-						System.out.println("No se ha podido modificar");
-					break;
-				case 5:
-					System.out.println("Introduzca código reserva que desea eliminar:");
-					codR = sc.nextLine();
-					if (bdResVis.eliminarReserva(codR) == 1)
+					System.out.println("Introduzca código de la pista que desea eliminar:");
+					codP = sc.nextLine();
+					if (bdPisSal.borrarPista(codP) == 1)
 						System.out.println("Eliminada");
 					else
 						System.out.println("No se ha podido eliminar");
 					break;
+				case 5:
+					ve = bdPisSal.pistasSolicitadas();
+					for (int i = 0; i < ve.size(); i++)
+						System.out.println(ve.get(i).toStringClienteConfirmadas());
+					if (ve.size() == 0)
+						System.out.println("\nNo hay pistas solicitadas");
+					break;
 				case 6:
+					ve = bdPisSal.pistasSolicitadas();
+					for (int i = 0; i < ve.size(); i++)
+						System.out.println(i+" - "+ve.get(i).toStringClienteConfirmadas());
+					if (ve.size() == 0)
+						System.out.println("\nNo hay pistas solicitadas");
+					else { //Comprobar el numero introducido
+						System.out.println("¿Qué pista desea confirmar?");
+						int numP=sc.nextInt();
+						sc.nextLine();
+						if(bdPisSal.confirmarPista(ve.get(numP).getCod_pista()))
+							System.out.println("\nPista confirmada");
+						else
+							System.out.println("\nError confirmando la pista");
+					}
+					break;
+				case 7:
+					System.out.println("Introduce sala:");
+					nsala = sc.nextLine();
+					if(bdPisSal.reiniciarJuego(nsala)>=0)
+						System.out.println("Pistas reseteadas");
+					else
+						System.out.println("No ha sido posible resetear las pistas");
+					break;
+				case 8:
 					break;
 				default:
 					System.out.println("Opción incorrecta");
@@ -883,7 +901,7 @@ public class Main {
 				sc.nextLine();
 				System.out.println("\nHas introducido un caracter no válido");
 			}
-		} while (opc != 6);
+		} while (opc != 8);
 	}
 
 	public static void menuCliente(String usuario) {
@@ -942,8 +960,11 @@ public class Main {
 					}
 					break;
 				case 4:
-					if(bdResVis.poderJugar(usuario))
-						menuClienteJuego(usuario);
+					String nsala=bdResVis.poderJugar(usuario);
+					if(!nsala.equals("0")) {
+						bdPisSal.reiniciarJuego(nsala);
+						menuClienteJuego(usuario,nsala);
+					}
 					else
 						System.out.println("No tienes una reserva hoy");
 					break;
@@ -961,13 +982,13 @@ public class Main {
 		} while (opc != 5);
 	}
 	
-	public static void menuClienteJuego(String usuario) { //FALTA PARTE PISTAS
+	public static void menuClienteJuego(String usuario, String nsala) {
 		int opc = 0;
 		long min=0, seg=0;
 		timer = new Timer(3600000, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("\n¡SE ACABO EL TIEMPO!");
-				checkJuego=juegoAcabado(60,0,usuario);
+				checkJuego=juegoAcabado(60,0,usuario,nsala);
 				System.out.println("\nPulse una tecla para terminar");
 			}
 		});
@@ -980,8 +1001,9 @@ public class Main {
 				System.out.println("\nMENU JUEGO");
 				System.out.println("1. Ver tiempo");
 				System.out.println("2. Solicitar pista");
-				System.out.println("3. Ver pista");
-				System.out.println("4. Finalizar juego");
+				System.out.println("3. Ver pistas solicitadas");
+				System.out.println("4. Ver pistas disponibles");
+				System.out.println("5. Finalizar juego");
 
 				opc = sc.nextInt();
 				sc.nextLine();
@@ -990,18 +1012,42 @@ public class Main {
 				}
 				switch (opc) {
 				case 1:
-					System.out.println("Tiempo transcurrido: "+ChronoUnit.MINUTES.between(horaInicio, LocalTime.now())+" minutos, "+ChronoUnit.SECONDS.between(horaInicio, LocalTime.now())+" segundos");
+					System.out.println("Tiempo transcurrido: "+ChronoUnit.MINUTES.between(horaInicio, LocalTime.now())+" minutos, "+(ChronoUnit.SECONDS.between(horaInicio, LocalTime.now()))%60+" segundos");
 					break;
 				case 2:
-					
+					int numP;
+					Vector<Pista> ve = bdPisSal.listarPistasSala(nsala);
+					for (int i = 0; i < ve.size(); i++)
+						System.out.println(i+" - "+ve.get(i).toStringCliente());
+					if (ve.size() == 0)
+						System.out.println("\nNo hay pistas disponibles actualmente");
+					else {
+						System.out.println("\n¿Qué pista desea solicitar?");
+						numP=sc.nextInt();
+						if(bdPisSal.pedirPista(ve.get(numP).getCod_pista()))
+							System.out.println("\nPista solicitada");
+						else
+							System.out.println("\nNo ha sido posible solicitar la pista");
+					}
 					break;
 				case 3:
-					
+					ve = bdPisSal.listarPistasSalaCliente(nsala);
+					for (int i = 0; i < ve.size(); i++)
+						System.out.println(ve.get(i).toStringCliente());
+					if (ve.size() == 0)
+						System.out.println("\nNo hay pistas solicitadas");
 					break;
 				case 4:
+					ve = bdPisSal.pistasConfirmadas(nsala);
+					for (int i = 0; i < ve.size(); i++)
+						System.out.println(ve.get(i).toStringClienteConfirmadas());
+					if (ve.size() == 0)
+						System.out.println("\nNo hay pistas disponibles");
+					break;
+				case 5:
 					min=ChronoUnit.MINUTES.between(horaInicio, LocalTime.now());
-					seg=ChronoUnit.SECONDS.between(horaInicio, LocalTime.now());
-					checkJuego=juegoAcabado(min,seg,usuario);
+					seg=(ChronoUnit.SECONDS.between(horaInicio, LocalTime.now()))%60;
+					checkJuego=juegoAcabado(min,seg,usuario,nsala);
 					break;
 				default:
 					System.out.println("Opción incorrecta");
@@ -1013,17 +1059,17 @@ public class Main {
 					return;
 				System.out.println("\nHas introducido un caracter no válido");
 			}
-		} while (opc != 4);
+		} while (opc != 5);
 		
 	}
 	
-	public static boolean juegoAcabado(long min, long seg, String usuario) {
+	public static boolean juegoAcabado(long min, long seg, String usuario,String nsala) {
 		System.out.println("\nHabéis tardado: "+min+" minutos, "+seg+" segundos.");
 		int id = conector.consultaNumeroSecuencial("COD_VISITA", "visitas", "VI");
 		String ident = "VI" + (id + 1);
 		if(bdResVis.añadirVisitaTrasJugar(usuario, min,ident)) {
 			System.out.println("\nVisita añadida en tu historial de visitas, puede verla en el menú principal");
-			if(bdResVis.eliminarReservaTrasJugar(usuario)==1)
+			if(bdResVis.eliminarReservaTrasJugar(usuario)>0)
 				System.out.println("Se ha procedido a eliminar su reserva.\n\n¡Gracias por vuestra visita!");
 			else
 				System.out.println("\nSe ha producido un error eliminando su reserva, por favor, póngase en contacto con el empleado de la sala");
@@ -1031,7 +1077,7 @@ public class Main {
 		else
 			System.out.println("\nSe ha producido un añadiendo su visita, por favor, póngase en contacto con el empleado de la sala");
 		
-		//RESETEAR PISTAS
+		bdPisSal.reiniciarJuego(nsala);
 		timer.stop();
 		return true;
 	}

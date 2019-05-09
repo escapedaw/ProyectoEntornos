@@ -41,6 +41,7 @@ public class Pista {
 	}
 	
 	
+	
 
 	public Pista(String cod_pista, String nsala, String descripcion) {
 		super();
@@ -76,8 +77,19 @@ public class Pista {
 
 	@Override
 	public String toString() {
+		return "Pista [cod_pista=" + cod_pista + ", nsala=" + nsala + ", descripcion=" + descripcion + ", solicitado="
+				+ solicitado + ", confirmado=" + confirmado + "]";
+	}
+	
+	public String toStringClienteConfirmadas() {
 		return "Pista [cod_pista=" + cod_pista + ", nsala=" + nsala + ", descripcion=" + descripcion + "]";
 	}
+	
+	public String toStringCliente() {
+		return "Pista [cod_pista=" + cod_pista + "]";
+	}
+
+
 
 	
 
