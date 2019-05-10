@@ -1,11 +1,14 @@
-/*
- * BD_Conector: Se encarga de abrir y cerrar la base de datos
- */
 package bbdd;
 
 import java.sql.*;
 
 
+/**
+ * Clase que conecta nuestra aplicación de java con la base de datos de mysql. Se encarga de abrir y cerrar la base de datos
+ * 
+ * @author Sandra Lobón
+ *
+ */
 public class BD_Conector {
 	static private String base;
 	static private String usuario;
@@ -20,6 +23,9 @@ public class BD_Conector {
 		url="jdbc:mysql://localhost/"+base;
 	}
 	
+	/**
+	 * Método que abre la base de datos
+	 */
 	public void abrir(){
 		try{
 			Class.forName("com.mysql.jdbc.Driver");
@@ -36,6 +42,9 @@ public class BD_Conector {
 	
 	}	
 	
+	/**
+	 * Método que cierra la base de datos
+	 */
 	public void cerrar(){
 		try{
 			c.close();
@@ -46,6 +55,14 @@ public class BD_Conector {
 		}
 	}
 	
+	/**
+	 * Método que nos devuelve el último número del identificador de cada tabla. 
+	 * 
+	 * @param codigo Nombre de la columna
+	 * @param tabla Nombre de la tabla de la base de datos
+	 * @param cod Dos letras que identifican a cada codigo. Por ejemplo: "PI" en pistas
+	 * @return Devuelve el último número del identificador de la tabla
+	 */
 	public int consultaNumeroSecuencial(String codigo, String tabla, String cod) {
 		Statement s;	
 		ResultSet reg;

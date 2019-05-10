@@ -9,8 +9,11 @@ import modelos.Pista;
 import modelos.Sala;
 
 /**
+ * Clase que contiene todos los métodos que acceden a la tablas "Pistas" y
+ * "Salas" de la base de datos. Se realizan las tareas de crear, modificar y
+ * eliminar en ambas tablas.
  * 
- * @author Sandra
+ * @author Sandra Lobón y Daniel González
  *
  */
 public class BD_PistaSala extends BD_Conector {
@@ -26,8 +29,9 @@ public class BD_PistaSala extends BD_Conector {
 	/**
 	 * Metodo que introduce los datos de un objeto sala en la bbdd
 	 * 
-	 * @param sa
-	 * @return numero de filas si se crea, -1 si no se crea
+	 * @param sa objeto de tipo sala
+	 * @return numero de filas que se insertan. 1 si se inserta una fila, 0 si no se
+	 *         inserta ninguna fila y -1 si hay algún error
 	 */
 
 	public int crearSala(Sala sa) {
@@ -51,6 +55,7 @@ public class BD_PistaSala extends BD_Conector {
 	 * Metodo que modifica el precio de una sala en la bbdd
 	 * 
 	 * @param sa
+	 *            Objetido de tipo sala que se quiere modificar
 	 * @return numero de filas si se modifica, -1 si no se puede
 	 */
 
@@ -70,10 +75,13 @@ public class BD_PistaSala extends BD_Conector {
 	}
 
 	/**
-	 * Metodo que modifica el id del empleado
+	 * Método que modifica el ID_emple de la sala
 	 * 
-	 * @param sa
-	 * @return numero de filas, -1 si hay una excepcion
+	 * @param idEmple
+	 *            Id del empleado que queremos añadir o modificar
+	 * @param nSala
+	 *            Número de la sala
+	 * @return numero de filas si se modifica, -1 si no se puede
 	 */
 
 	public int modificarIdEmple(String idEmple, String nSala) {
@@ -94,10 +102,10 @@ public class BD_PistaSala extends BD_Conector {
 	/**
 	 * Metodo que elimina una sala en concreto de la bbdd
 	 * 
-	 * @param sa
+	 * @param nSala
+	 *            Número de sala que se desea eliminar
 	 * @return numero de filas si se elimina, -1 si no se puede
 	 */
-
 	public int borrarSala(String nSala) {
 		String cadena = "DELETE FROM salas WHERE NSALA='" + nSala + "'";
 
@@ -148,6 +156,7 @@ public class BD_PistaSala extends BD_Conector {
 	 * Metodo que introduce los datos de un objeto pista en la bbdd
 	 * 
 	 * @param pi
+	 *            Objeto de tipo pista
 	 * @return numero de filas si se crea, -1 si no se puede
 	 */
 
@@ -170,10 +179,12 @@ public class BD_PistaSala extends BD_Conector {
 	/**
 	 * Metodo que modifica la descripcion de una pista de la bbdd
 	 * 
-	 * @param pi
-	 * @returnnumero de filas si se modifica, -1 si no se puede
+	 * @param descripcion
+	 *            Nueva descripción de la pista
+	 * @param codP
+	 *            Código de la pista que se desea modificar
+	 * @return numero de filas si se modifica, -1 si no se puede
 	 */
-
 	public int modificarDescripcion(String descripcion, String codP) {
 		String cadenaSQL = "UPDATE pistas SET DESCRIPCION='" + descripcion + "' WHERE COD_PISTA='" + codP + "';";
 
@@ -192,10 +203,10 @@ public class BD_PistaSala extends BD_Conector {
 	/**
 	 * Metodo que elimina una pista de la bbdd
 	 * 
-	 * @param pi
+	 * @param codP
+	 *            Codigo de la pista que se desea borrar
 	 * @return numero de filas si se elimina, -1 si no se puede
 	 */
-
 	public int borrarPista(String codP) {
 		String cadena = "DELETE FROM pistas WHERE COD_PISTA='" + codP + "';";
 
@@ -214,11 +225,10 @@ public class BD_PistaSala extends BD_Conector {
 	}
 
 	/**
-	 * Metodo que busca todos los datos de la tabla salas y los introduce en un
+	 * Metodo que busca todos los datos de la tabla pistas y los introduce en un
 	 * vector
 	 * 
 	 * @return vector de pistas o null si salta una excepcion
-	 * @throws TecnicaExcepcion
 	 */
 
 	public Vector<Pista> listarPistas() {
@@ -242,6 +252,14 @@ public class BD_PistaSala extends BD_Conector {
 
 	}
 
+	/**
+	 * Metodo que busca todos los datos de la tabla pistas de una sala determinada y
+	 * los introduce en un vector
+	 * 
+	 * @param nsala
+	 *            numero de la sala de la que se desean buscar las pistas
+	 * @return vector de pistas o null si salta una excepcion
+	 */
 	public Vector<Pista> listarPistasSala(String nsala) {
 		String cadenaSQL = "SELECT * from pistas WHERE NSALA='" + nsala + "' AND SOLICITADO=0;";
 		Vector<Pista> listaPistas = new Vector<Pista>();
@@ -267,6 +285,7 @@ public class BD_PistaSala extends BD_Conector {
 	 * Metodo que busca la sala en la que se encuentra un cliente
 	 * 
 	 * @param nif
+	 *            dni del cliente
 	 * @return nsala si la encuentra, 0 si no tiene sala
 	 */
 	public int buscarSala(String nif) {
@@ -291,9 +310,10 @@ public class BD_PistaSala extends BD_Conector {
 	 * Metodo que cambia a true la variable solicitado (Pista) cuando el cliente
 	 * pide una pista
 	 * 
+	 * @param codP
+	 *            codigo de la pista a modificar
 	 * @return true si se ha ejecutado bien, false si ha dado fallo
 	 */
-
 	public boolean pedirPista(String codP) {
 
 		String cadenaSQL = "UPDATE pistas SET SOLICITADO = 1 where COD_PISTA = '" + codP + "';";
@@ -309,7 +329,16 @@ public class BD_PistaSala extends BD_Conector {
 			return false;
 		}
 	}
-	
+
+	/**
+	 * Metodo que busca todos los datos de la tabla pistas de una sala determinada y
+	 * los introduce en un vector. Es un método para los clientes pues solo añade
+	 * las que han sido solicitadas pero no confirmadas.
+	 * 
+	 * @param nsala
+	 *            numero de la sala de la que se desean buscar las pistas
+	 * @return vector de pistas o null si salta una excepcion
+	 */
 	public Vector<Pista> listarPistasSalaCliente(String nsala) {
 		String cadenaSQL = "SELECT * from pistas WHERE NSALA='" + nsala + "' AND SOLICITADO=1 AND CONFIRMADO=0;";
 		Vector<Pista> listaPistas = new Vector<Pista>();
@@ -332,9 +361,9 @@ public class BD_PistaSala extends BD_Conector {
 	}
 
 	/**
-	 * Metodo que busca las pistas solicitadas
+	 * Metodo que busca las pistas solicitadas pero que no han sido aún confirmadas
 	 * 
-	 * @return listaSolicitadas
+	 * @return vector de pistas solicitadas o null si salta una excepcion
 	 */
 
 	public Vector<Pista> pistasSolicitadas() {
@@ -345,7 +374,7 @@ public class BD_PistaSala extends BD_Conector {
 			this.abrir();
 			s = c.createStatement();
 			reg = s.executeQuery(cadenaSQL);
-			if (reg.next()) {
+			while (reg.next()) {
 				listaSolicitadas.add(
 						new Pista(reg.getString("COD_PISTA"), reg.getString("NSALA"), reg.getString("DESCRIPCION")));
 			}
@@ -361,6 +390,7 @@ public class BD_PistaSala extends BD_Conector {
 	 * Metodo que confirma la pista seleccionada
 	 * 
 	 * @param cod_pista
+	 *            codigo de pista
 	 * @return true si se ha ejecutado, false si no
 	 */
 
@@ -399,14 +429,13 @@ public class BD_PistaSala extends BD_Conector {
 	 * Metodo que comprueba la variable confirmado y devuelve la descripcion de una
 	 * pista si esta a true
 	 * 
-	 * @param pi
-	 * @return String descripcion
-	 * @throws TecnicaExcepcion
+	 * @param nsala
+	 *            número de la sala
+	 * @return vector de pistas confirmadas o null si salta una excepcion
 	 */
-	// Modificar para que de la pista correspondiente, ahora mismo da todas las
-	// confirmadas
 	public Vector<Pista> pistasConfirmadas(String nsala) {
-		String cadenaSQL = "SELECT NSALA, COD_PISTA, DESCRIPCION FROM pistas WHERE NSALA='" + nsala + "' AND CONFIRMADO = 1";
+		String cadenaSQL = "SELECT NSALA, COD_PISTA, DESCRIPCION FROM pistas WHERE NSALA='" + nsala
+				+ "' AND CONFIRMADO = 1";
 
 		Vector<Pista> listaConfirmadas = new Vector<Pista>();
 		try {
@@ -426,7 +455,15 @@ public class BD_PistaSala extends BD_Conector {
 		}
 	}
 
-
+	/**
+	 * Método que resetea las pistas de una sala determinada poniendo a false el
+	 * campo de solicitado y confirmado
+	 * 
+	 * @param nsala
+	 *            numero de sala que se desea resetear sus pistas
+	 * @return devuelve el número de filas modificadas. -1 en caso de que salte
+	 *         excepción
+	 */
 	public int reiniciarJuego(String nsala) {
 		String cadenaSQL;
 		int filas = 0;

@@ -16,12 +16,7 @@ public class Pista {
 	private boolean confirmado;
 	private static int numPistas;
 	
-	/**
-	 * Constructor para crear objeto Pista
-	 * @param nsala
-	 * @param descripcion
-	 */
-	
+
 	public Pista(String cod_pista, String nsala, String descripcion, boolean solicitado, boolean confirmado, String codigo, String tabla, String cod) {
 		super();
 		BD_Conector bc= new BD_Conector ();

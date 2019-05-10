@@ -61,7 +61,7 @@ public class Visita {
 	@Override
 	public String toString() {
 		return "Visita [cod_visita=" + cod_visita + ", nsala=" + nsala + ", id_emple=" + id_emple + ", nif_cliente="
-				+ nif_cliente + ", fecha=" + fecha + ", tiempo=" + tiempo + ", nPersonas=" + nPersonas + ", importe="
+				+ nif_cliente + ", fecha=" + fecha + ", tiempo=" + (int)tiempo + " minutos, nPersonas=" + nPersonas + ", importe="
 				+ importe + "]";
 	}
 	

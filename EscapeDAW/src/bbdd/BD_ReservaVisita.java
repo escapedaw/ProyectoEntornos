@@ -19,7 +19,12 @@ public class BD_ReservaVisita extends BD_Conector {
 		super();
 	}
 
-	// DANI
+	/**
+	 * Método que añade una reserva a la tabla "reservas" de la base de datos
+	 * 
+	 * @param re Objeto de tipo reserva
+	 * @return numero de filas si se añade, -1 si no se puede
+	 */
 	public int añadirReserva(Reserva re) {
 
 		String cadena2 = "SELECT PRECIO FROM salas WHERE NSALA = '" + re.getnSala() + "';";
@@ -45,7 +50,11 @@ public class BD_ReservaVisita extends BD_Conector {
 
 	}
 
-	// DANI
+	/**
+	 * Metodo que busca todos los datos de la tabla reservas y los introduce en un vector
+	 * 
+	 * @return vector de salas o null si salta una excepción
+	 */
 	public Vector<Reserva> mostrarReservas() {
 		Vector<Reserva> v = new Vector<Reserva>();
 		String cadena = "SELECT * FROM reservas";
@@ -71,8 +80,14 @@ public class BD_ReservaVisita extends BD_Conector {
 		}
 	}
 
-	// DANI
-	public double modificarPersonasReserva(String codR, int numP) {
+	/**
+	 * Método que modifica el número de personas de una reserva
+	 * 
+	 * @param codR codigo de la reserva
+	 * @param numP número de personas nuevo
+	 * @return numero de filas si se modifica, -1 si no se puede
+	 */
+	public int modificarPersonasReserva(String codR, int numP) {
 		String cadena;
 		String cadena2 = "SELECT PRECIO FROM salas WHERE NSALA = (SELECT NSALA FROM reservas WHERE COD_RESERVA = '"
 				+ codR + "');";
@@ -94,7 +109,13 @@ public class BD_ReservaVisita extends BD_Conector {
 		}
 	}
 
-	// DANI
+	/**
+	 * Método que modifica la fecha de una reserva
+	 * 
+	 * @param fecha fecha nueva
+	 * @param codR codigo de la reserva a modificar
+	 * @return numero de filas si se modifica, -1 si no se puede
+	 */
 	public double modificarFechaReserva(LocalDateTime fecha, String codR) {
 		String cadena = "UPDATE reservas SET FECHA='" + fecha + "' WHERE COD_RESERVA ='" + codR + "';";
 		try {
@@ -109,7 +130,12 @@ public class BD_ReservaVisita extends BD_Conector {
 		}
 	}
 
-	// DANI
+	/**
+	 * Método para eliminar una reserva
+	 * 
+	 * @param cod_reserva codigo de la reserva a eliminar
+	 * @return numero de filas si se elimina, -1 si no se puede
+	 */
 	public int eliminarReserva(String cod_reserva) {
 		String cadena = "DELETE FROM reservas WHERE cod_reserva='" + cod_reserva + "'";
 
@@ -127,7 +153,12 @@ public class BD_ReservaVisita extends BD_Conector {
 		}
 	}
 
-	// DANI
+	
+	/**
+	 * Metodo que busca todos los datos de la tabla visitas y los introduce en un vector
+	 * 
+	 * @return vector de visitas o null si salta una excepción
+	 */
 	public Vector<Visita> mostrarVisitas() {
 		Vector<Visita> v = new Vector<Visita>();
 		String cadena = "SELECT * FROM visitas";
@@ -151,8 +182,13 @@ public class BD_ReservaVisita extends BD_Conector {
 			return null;
 		}
 	}
-
-	// DANI
+	
+	/**
+	 * Metodo que busca todos los datos de la tabla visitas segun un id y los introduce en un vector
+	 * 
+	 * @param usuario  id del usuario
+	 * @return vector de visitas o null si salta una excepción
+	 */
 	public Vector<Visita> mostrarVisitasID(String usuario) {
 		Vector<Visita> v = new Vector<Visita>();
 		String cadena = "SELECT * FROM visitas WHERE  nif_cliente = (SELECT NIF FROM clientes WHERE ID='" + usuario
@@ -177,8 +213,13 @@ public class BD_ReservaVisita extends BD_Conector {
 			return null;
 		}
 	}
-
-	// DANI
+	
+	/**
+	 * Metodo que busca todos los datos de la tabla reservas segun un id y los introduce en un vector
+	 * 
+	 * @param usuario id del usuario
+	 * @return vector de reservas o null si salta una excepción
+	 */
 	public Vector<Reserva> mostrarReservasID(String usuario) {
 		Vector<Reserva> v = new Vector<Reserva>();
 		String cadena = "SELECT * FROM reservas WHERE  nif_cliente = (SELECT NIF FROM clientes WHERE ID='" + usuario
@@ -205,7 +246,14 @@ public class BD_ReservaVisita extends BD_Conector {
 			return null;
 		}
 	}
-
+	
+	
+	/**
+	 * Método que comprueba si un cliente tiene una reserva ese mismo día para poder jugar. 
+	 * 
+	 * @param usuario id del usuario
+	 * @return Devuelve el número de sala si puede jugar, devuelve "0" si no puede y devuelve "-1" en caso de error en la base de datos
+	 */
 	public String poderJugar(String usuario) {
 		String cadena = "SELECT * FROM reservas WHERE  nif_cliente = (SELECT NIF FROM clientes WHERE ID='" + usuario
 				+ "');";
@@ -228,6 +276,12 @@ public class BD_ReservaVisita extends BD_Conector {
 		}
 	}
 
+	/**
+	 * Método que elimina una reserva tras terminar de jugar.
+	 * 
+	 * @param id id del usuario
+	 * @return numero de filas si se elimina, -1 si no se puede
+	 */
 	public int eliminarReservaTrasJugar(String id) {
 		LocalDate fecha = LocalDate.now();
 		String cadena = "DELETE FROM reservas WHERE NIF_CLIENTE = (SELECT NIF FROM clientes WHERE ID='" + id
@@ -248,6 +302,14 @@ public class BD_ReservaVisita extends BD_Conector {
 	}
 
 
+	/**
+	 * Método que añade una visita en la tabla visitas tras jugar.
+	 * 
+	 * @param usuario id del usuario
+	 * @param min minutos que ha tardado en jugar
+	 * @param id identificador de la visita, por ejemplo, VI3
+	 * @return devuelve true si lo hace bien
+	 */
 	public boolean añadirVisitaTrasJugar(String usuario, long min,String id) {
 		double minut = Double.parseDouble(Long.toString(min));
 		LocalDate fecha = LocalDate.now();
@@ -289,6 +351,13 @@ public class BD_ReservaVisita extends BD_Conector {
 
 	}
 	
+	/**
+	 * Método que calcula el importe acumulado en las visitas en un rango de fechas
+	 * 
+	 * @param fechaInicio fecha inicio
+	 * @param fechaFin fecha final
+	 * @return devuelve el importe acumulado. devolverá -1 en caso de error
+	 */
 	public int facturacion(LocalDate fechaInicio, LocalDate fechaFin) {
 		String cadena = "SELECT SUM(IMPORTE) FROM visitas WHERE FECHA BETWEEN '"+fechaInicio+"%' AND '"+fechaFin+"%';";
 		
