@@ -4,7 +4,6 @@ import java.sql.*;
 import java.util.Vector;
 
 import modelos.Empleado;
-import modelos.Jefe;
 import modelos.Pista;
 import modelos.Sala;
 
@@ -13,7 +12,7 @@ import modelos.Sala;
  * "Salas" de la base de datos. Se realizan las tareas de crear, modificar y
  * eliminar en ambas tablas.
  * 
- * @author Sandra Lobón y Daniel González
+ * @author Sandra Lobón
  *
  */
 public class BD_PistaSala extends BD_Conector {
@@ -279,31 +278,6 @@ public class BD_PistaSala extends BD_Conector {
 			return null;
 		}
 
-	}
-
-	/**
-	 * Metodo que busca la sala en la que se encuentra un cliente
-	 * 
-	 * @param nif
-	 *            dni del cliente
-	 * @return nsala si la encuentra, 0 si no tiene sala
-	 */
-	public int buscarSala(String nif) {
-		String cadenaSQL = "SELECT NSALA FROM reservas WHERE NIF_CLIENTE = '" + nif + "'";
-
-		try {
-			this.abrir();
-			s = c.createStatement();
-			reg = s.executeQuery(cadenaSQL);
-			if (reg.next()) {
-				nsala = reg.getInt("NSALA");
-			}
-			s.close();
-			this.cerrar();
-			return nsala;
-		} catch (SQLException e) {
-			return 0;
-		}
 	}
 
 	/**

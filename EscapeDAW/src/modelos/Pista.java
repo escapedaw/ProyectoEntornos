@@ -2,11 +2,6 @@ package modelos;
 
 import bbdd.BD_Conector;
 
-/**
- * 
- * @author Sandra
- *
- */
 public class Pista {
 
 	private String cod_pista;

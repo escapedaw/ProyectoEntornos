@@ -11,6 +11,14 @@ import java.util.*;
 import modelos.Reserva;
 import modelos.Visita;
 
+/**
+ * Clase que contiene todos los métodos que acceden a la tablas "Visitas" y
+ * "Reservas" de la base de datos. Se realizan las tareas de crear, modificar y
+ * eliminar en ambas tablas.
+ * 
+ * @author Daniel González y Ricardo Rubio
+ *
+ */
 public class BD_ReservaVisita extends BD_Conector {
 	private static Statement s;
 	private static ResultSet reg;
