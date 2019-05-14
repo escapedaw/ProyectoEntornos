@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 08-05-2019 a las 14:03:36
+-- Tiempo de generación: 14-05-2019 a las 07:47:21
 -- Versión del servidor: 5.7.24
 -- Versión de PHP: 7.2.14
 
@@ -47,7 +47,9 @@ CREATE TABLE IF NOT EXISTS `clientes` (
 --
 
 INSERT INTO `clientes` (`NIF`, `ID`, `ID_EMPLE`, `NOMBRE`, `APELLIDO`, `DIRECCION`, `TELEFONO`) VALUES
-('55', 'CL1', 'EM1', 'DANI', 'GONZALEZ', 'PEGASO', '66');
+('11111111A', 'CL1', 'EM1', 'Pablo', 'Martín', 'Calle Hortaleza', '684336603'),
+('22222222B', 'CL2', 'EM1', 'Marcos', 'Grao', 'Calle Wibble', '608488772'),
+('33333333C', 'CL3', 'EM2', 'Begoña', 'López', 'Calle San Blas', '666554433');
 
 -- --------------------------------------------------------
 
@@ -58,7 +60,7 @@ INSERT INTO `clientes` (`NIF`, `ID`, `ID_EMPLE`, `NOMBRE`, `APELLIDO`, `DIRECCIO
 DROP TABLE IF EXISTS `credenciales`;
 CREATE TABLE IF NOT EXISTS `credenciales` (
   `USUARIO` varchar(4) NOT NULL,
-  `PASSWORD` varchar(15) NOT NULL,
+  `PASSWORD` varchar(40) NOT NULL,
   `ROL` varchar(1) NOT NULL,
   PRIMARY KEY (`USUARIO`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -68,9 +70,12 @@ CREATE TABLE IF NOT EXISTS `credenciales` (
 --
 
 INSERT INTO `credenciales` (`USUARIO`, `PASSWORD`, `ROL`) VALUES
-('CL1', 'II', 'C'),
-('EM1', 'juan', 'E'),
-('JE1', 'AA', 'J');
+('CL1', 'e48bf9dad3f5d442f9d14d931be6f43e', 'C'),
+('CL2', '81cf6107131a3583e2b0b762cb9c2862', 'C'),
+('CL3', '9d3d9048db16a7eee539e93e3618cbe7', 'C'),
+('EM1', 'a57b8491d1d8fc1014dd54bcf83b130a', 'E'),
+('EM2', '66cc12e3c6d68de3fef6de89cf033f67', 'E'),
+('JE1', '3b98e2dffc6cb06a89dcb0d5c60a0206', 'J');
 
 -- --------------------------------------------------------
 
@@ -98,7 +103,8 @@ CREATE TABLE IF NOT EXISTS `empleados` (
 --
 
 INSERT INTO `empleados` (`NIF`, `ID`, `NOMBRE`, `APELLIDO`, `TELEFONO`, `DIRECCION`, `SUELDO`, `ID_JEFE`) VALUES
-('5555555', 'EM1', 'Sandra', 'Lobon', '666', 'Paseo Castellana', 200, 'JE1');
+('51487420B', 'EM1', 'Sandra', 'Lobón', '659697905', 'Calle la Marina', 700, 'JE1'),
+('51988745G', 'EM2', 'José', 'González', '648787851', 'Calle la Paloma', 650, 'JE1');
 
 -- --------------------------------------------------------
 
@@ -124,7 +130,7 @@ CREATE TABLE IF NOT EXISTS `jefes` (
 --
 
 INSERT INTO `jefes` (`NIF`, `ID`, `NOMBRE`, `APELLIDO`, `TELEFONO`, `SUELDO`, `DIRECCION`) VALUES
-('66666666H', 'JE1', 'DANIEL', 'GONZALEZ', '669518300', 2000, 'PEGASO');
+('52893478X', 'JE1', 'Daniel', 'González', '669518300', 2000, 'Calle Pegaso');
 
 -- --------------------------------------------------------
 
@@ -142,6 +148,16 @@ CREATE TABLE IF NOT EXISTS `pistas` (
   PRIMARY KEY (`COD_PISTA`),
   KEY `NSALA` (`NSALA`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `pistas`
+--
+
+INSERT INTO `pistas` (`COD_PISTA`, `NSALA`, `DESCRIPCION`, `SOLICITADO`, `CONFIRMADO`) VALUES
+('PI1', 'SA1', 'Mira detrás del cuadro', 0, 0),
+('PI2', 'SA1', 'Utiliza la luz', 0, 0),
+('PI3', 'SA2', 'Levanta la alfombra', 0, 0),
+('PI4', 'SA2', 'Abre el grifo', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -191,7 +207,8 @@ CREATE TABLE IF NOT EXISTS `salas` (
 --
 
 INSERT INTO `salas` (`NSALA`, `ID_EMPLE`, `ID_JEFE`, `TIPO`, `DIFICULTAD`, `NPERSONAS`, `PRECIO`) VALUES
-('SA1', 'EM1', 'JE1', 'MIEDO', 'MEDIO', 2, 30);
+('SA1', 'EM1', 'JE1', 'Miedo', 'Alta', 6, 15),
+('SA2', 'EM2', 'JE1', 'Risa', 'Baja', 7, 12);
 
 -- --------------------------------------------------------
 
@@ -204,7 +221,7 @@ CREATE TABLE IF NOT EXISTS `visitas` (
   `COD_VISITA` varchar(4) NOT NULL,
   `NSALA` varchar(9) NOT NULL,
   `ID_EMPLE` varchar(4) NOT NULL,
-  `NIF_CLIENTE` varchar(4) NOT NULL,
+  `NIF_CLIENTE` varchar(9) NOT NULL,
   `FECHA` datetime NOT NULL,
   `TIEMPO` double NOT NULL,
   `NPERSONAS` int(2) NOT NULL,
@@ -220,7 +237,7 @@ CREATE TABLE IF NOT EXISTS `visitas` (
 --
 
 INSERT INTO `visitas` (`COD_VISITA`, `NSALA`, `ID_EMPLE`, `NIF_CLIENTE`, `FECHA`, `TIEMPO`, `NPERSONAS`, `IMPORTE`) VALUES
-('VI1', 'SA1', 'EM1', '55', '2019-05-08 12:00:00', 0, 5, 150);
+('VI1', 'SA1', 'EM1', '11111111A', '2019-05-14 12:45:00', 0, 4, 60);
 
 --
 -- Restricciones para tablas volcadas
